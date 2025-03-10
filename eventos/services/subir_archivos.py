@@ -16,7 +16,7 @@ def listar_archivos(bucket_name):
         peso_archivo = blob.size
         
         # Verificar si ya existe en la BD para evitar duplicados
-        if not EGG.objects.filter(path=url_archivo).exists():
+        if not EEG.objects.filter(path=url_archivo).exists():
             form = EEGForm({'nombre': nombre_archivo, 'path': url_archivo, 'peso_archivo':peso_archivo})
             
             if form.is_valid():
