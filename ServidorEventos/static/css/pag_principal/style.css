@@ -1,0 +1,20 @@
+/* Estilo para el enlace (a) */
+.button-link {
+    text-decoration: none; /* Quita el subrayado del enlace */
+}
+
+/* Estilo para el botón */
+.button-blue {
+    background-color: #0051ba; /* Azul brillante */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-blue:hover {
+    background-color: #003e81; /* Azul más oscuro al pasar el mouse */
+}

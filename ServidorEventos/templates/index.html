@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/pag_principal/style.css' %}">
+{% endblock %}
+{% block content %}
+
+    <div style=" display: flex; align-items: center; justify-content: center;" class="login-box auth0-box before">
+            <img style="width:50%; " src="/static/media/analisis.jpg" />
+    </div>
+    <br>
+    <div style=" display: flex; align-items: center; justify-content: center;" class="login-box auth0-box before">
+        <a href="/eventos/EEG" class="button-link">
+            <button class="button-blue">Iniciar análisis EEG</button>
+        </a>
+    </div>
+
+
+
+{% endblock %}
