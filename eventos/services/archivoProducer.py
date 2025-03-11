@@ -26,6 +26,4 @@ def enviar_mensaje(payload,nombre):
                         routing_key=topic, body=payload)
     print("Se envio el archivo:", nombre)
 
-    time.sleep(10)
-
     connection.close()
