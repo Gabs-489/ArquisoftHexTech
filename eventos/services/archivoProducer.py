@@ -16,10 +16,14 @@ def enviar_mensaje(payload,nombre):
 
     channel.exchange_declare(exchange=exchange, exchange_type='topic')
 
+    channel.queue_declare(queue="monitoring_prediction")
+
     print('> Enviando el archivo')
 
     channel.basic_publish(exchange=exchange,
                         routing_key=topic, body=payload)
     print("Se envio el archivo:", nombre)
+
+    time.sleep(10)
 
     connection.close()
