@@ -5,7 +5,7 @@ def get_archivos():
     return (queryset)
 
 def get_resultados():
-    queryset = EEG.objects.exclude(resultado_analisis__isnull=True).exclude(resultado_analisis="").order_by('-fecha_resultado')[:10]
+    queryset = EEG.objects.exclude(resultado_analisis__isnull=True).exclude(resultado_analisis="").order_by('-fecha')[:10]
     return queryset
 
 def get_archivo(id):
