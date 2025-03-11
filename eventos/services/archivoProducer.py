@@ -18,6 +18,8 @@ def enviar_mensaje(payload,nombre):
 
     channel.queue_declare(queue="monitoring_prediction")
 
+    channel.queue_bind(exchange=exchange, queue="monitoring_prediction", routing_key=topic)
+
     print('> Enviando el archivo')
 
     channel.basic_publish(exchange=exchange,
