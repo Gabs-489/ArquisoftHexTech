@@ -23,8 +23,7 @@ def iniciar_consumer():
 
     channel.exchange_declare(exchange=exchange, exchange_type='topic')
 
-    result = channel.queue_declare('', exclusive=True)
-    queue_name = result.method.queue
+    queue_name = "monitoring_results"
 
     channel.queue_bind(
         exchange=exchange, queue=queue_name, routing_key=topic)
