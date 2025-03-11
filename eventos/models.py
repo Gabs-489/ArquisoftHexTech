@@ -15,7 +15,6 @@ class Examen(Evento):
 
 class EEG(Examen):
     path = models.CharField(max_length=500)
-    fecha = models.DateTimeField(auto_now_add=True)
     resultado_analisis = models.CharField(max_length=1000)
 
     def __str__(self):

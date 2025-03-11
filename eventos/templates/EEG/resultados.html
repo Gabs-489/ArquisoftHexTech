@@ -44,12 +44,7 @@
                             <td>{{ archivo.id }}</td>
                             <td>{{ archivo.nombre }}</td>
                             <td>{{ archivo.fecha }}</td>
-                            <td> 
-                                <form method="POST" action="/ruta/del/servidor/">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="file_path" id="file_path" value="">
-                                    <button type="submit" onclick="setPath('/ruta/del/archivo')">Enviar Path</button>
-                                </form>
+                            <td> {{archivo.resultado}}
                             </td>
                         </tr>
                         {% endfor %}
