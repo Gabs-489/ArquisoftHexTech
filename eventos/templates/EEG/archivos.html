@@ -31,6 +31,7 @@
                     <table class="table table-hover">
                         <thead>
                         <tr style="color:#0E2EB0">
+                            <th>Id</th>
                             <th>Nombre</th>
                             <th>Fecha</th>
                             <th>Iniciar Análisis</th>
@@ -40,6 +41,7 @@
 
                         {% for archivo in lista_archivos %}
                         <tr>
+                            <td>{{ archivo.id }}</td>
                             <td>{{ archivo.nombre }}</td>
                             <td>{{ archivo.fecha }}</td>
                             <td> 
