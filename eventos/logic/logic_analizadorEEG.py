@@ -27,7 +27,6 @@ def crear_resultado(form):
     return ()  
 
 def actualizar_archivo(archivo_id,resultado):
-    print("Actualizar:",resultado)
     archivo = get_archivo(archivo_id)
     if archivo != None:
         archivo.resultado_analisis = resultado
