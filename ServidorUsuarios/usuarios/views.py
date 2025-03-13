@@ -2,7 +2,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from ServidorUsuarios.usuarios.serializers import Paciente_serializer
+from usuarios.serializers import Paciente_serializer
 
 from .logic.logic_u import get_paciente
 from .models import Paciente
