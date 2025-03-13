@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 
 class Usuario(models.Model):
     id = models.AutoField(primary_key=True)
@@ -16,4 +15,4 @@ class Paciente(Usuario):
     eventos =  models.JSONField(blank=True, default=list)
     
     def __str__(self):
-        return 'Nombre: %s %s, Cedula: %s' % (self.nombre,self.apellidos, self.cedula)
+        return '%s %s, Cedula: %s' % (self.nombre,self.apellidos, self.cedula)

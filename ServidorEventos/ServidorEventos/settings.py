@@ -142,6 +142,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Conexion otros microservicios
 
-MICROSERVICIO_USUARIOS_URL = os.getenv('MICROSERVICE_B_URL', 'http://localhost:8080')  # Valor por defecto
+MICROSERVICIO_USUARIOS_URL = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+if MICROSERVICIO_USUARIOS_URL:
+    os.environ['MICROSERVICIO_USUARIOS_URL'] = MICROSERVICIO_USUARIOS_URL
 
 
