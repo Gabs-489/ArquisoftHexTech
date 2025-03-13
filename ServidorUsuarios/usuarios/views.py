@@ -35,4 +35,5 @@ def obtener_examenes_paciente(request, cedula_paciente):
     if paciente == None:
         return Response({"error": "Paciente no encontrado"}, status=404)
     serializer = Paciente_serializer(paciente)
+    print("Retornando paciente con cedula",cedula_paciente)
     return Response(serializer.data)
