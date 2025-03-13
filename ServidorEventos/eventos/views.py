@@ -57,7 +57,7 @@ def pag_paciente_examenes(request):
 
     if request.method == 'POST':
         return redirect('/eventos/EEG/analisis')
-    return render(request, 'EEG/pag_principal.html',context)
+    return render(request, 'EEG/pag_paciente_examenes_EEG.html',context)
 
 def analisis_eeg(request):
     archivos = get_archivos()
@@ -97,6 +97,7 @@ def get_examenes_paciente(cedula_paciente):
         response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/pacientes/{cedula_paciente}", timeout=15)
         response.raise_for_status()
         data = response.json()
+        print(data)
         if not data:
             print("El paciente con ese numero de documento de identidad, no existe.")
             return None
