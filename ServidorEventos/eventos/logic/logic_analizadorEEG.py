@@ -4,8 +4,8 @@ def get_archivos(id_examenes):
     queryset = EEG.objects.filter(id__in=id_examenes).order_by('-fecha')[:10]
     return (queryset)
 
-def get_resultados():
-    queryset = EEG.objects.exclude(resultado_analisis__isnull=True).exclude(resultado_analisis="").order_by('-fecha')[:10]
+def get_resultados(id_examenes):
+    queryset = EEG.objects.filter(id__in=id_examenes).exclude(resultado_analisis__isnull=True).exclude(resultado_analisis="").order_by('-fecha')[:10]
     return queryset
 
 def get_archivo(id):
@@ -31,5 +31,6 @@ def actualizar_archivo(archivo_id,resultado):
     if archivo != None:
         archivo.resultado_analisis = resultado
         archivo.save()
+    print(archivo)
     return ()
     

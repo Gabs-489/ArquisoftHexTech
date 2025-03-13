@@ -85,7 +85,8 @@ def analisis_eeg(request):
     return render(request, 'EEG/archivos.html', context)
 
 def resultados_eeg(request):
-    archivos = get_resultados()
+    paciente_data = request.session.get('paciente_data', None)
+    archivos = get_resultados(paciente_data['eventos'])
     context = {
         'lista_archivos': archivos
     }
