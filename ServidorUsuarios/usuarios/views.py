@@ -11,6 +11,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 # Create your views here.
+def mostrar_pacientes(request):
+    return HttpResponse(status=204)
 
 def crear_paciente(request):
     if request.method == 'POST':
