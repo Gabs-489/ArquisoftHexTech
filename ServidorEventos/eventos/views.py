@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 
+from ServidorEventos.ServidorEventos.settings import MICROSERVICIO_USUARIOS_URL
 from eventos.services.archivoProducer import enviar_mensaje
 from eventos.services.subir_archivos import listar_archivos
 from .logic.logic_analizadorEEG import *
@@ -49,10 +50,17 @@ def resultados_eeg(request):
 
 
 
-def get_data_from_microservice_b():
-    response = requests.get(MICROSERVICE_B_URL)
-    if response.status_code == 200:
-        return response.json()
-    return None
+def get_examenes_paciente(cedula_paciente):
+    try:
+        response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/{cedula_paciente}", timeout=5)
+        response.raise_for_status()
+        data = response.json()
+        if not data:
+            print("El paciente con ese numero de documento de identidad, no existe.")
+            return None
+        return data
+    except requests.exceptions.RequestException as e:
+        print(f"Error al obtener los exámenes del paciente con la cedula {cedula_paciente}: {e}")
+        return None
 
 

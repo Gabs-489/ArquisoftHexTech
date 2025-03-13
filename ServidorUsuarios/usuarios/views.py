@@ -2,6 +2,8 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from ServidorUsuarios.usuarios.serializers import Paciente_serializer
+
 from .logic.logic_u import get_paciente
 from .models import Paciente
 
@@ -27,5 +29,9 @@ def crear_paciente(request):
 
 
 @api_view(['GET'])
-def data_view(request):
-    return Response({"message": "Datos desde Microservicio B"})
+def obtener_examenes_paciente(request, cedula_paciente):
+    paciente = get_paciente(cedula_paciente)
+    if paciente == None:
+        return Response({"error": "Paciente no encontrado"}, status=404)
+    serializer = Paciente_serializer(paciente)
+    return Response(serializer.data)
