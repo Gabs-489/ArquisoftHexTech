@@ -31,7 +31,7 @@ def pag_inicial(request):
                 request.session['paciente_data'] = datos
                 return redirect('/eventos/EEG')
         else:
-            mensaje = f"Error al obtener los exámenes del paciente con la cedula {numero_identidad_paciente}"
+            mensaje = f"Error al obtener los exámenes del paciente con el numero de identidad {numero_identidad_paciente}"
             return HttpResponse(f"""<script>
                                 alert("{mensaje}");
                                 window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
