@@ -13,6 +13,7 @@ topic = 'eeg.response'
 
 def callback(ch, method, properties, body):
     payload = json.loads(body.decode('utf8').replace("'", '"'))
+    print(payload)
     actualizar_archivo(payload['id'],payload['resultado'])
     print("El resultado se añadio al examen.")
 

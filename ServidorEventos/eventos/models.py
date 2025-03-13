@@ -18,5 +18,5 @@ class EEG(Examen):
     resultado_analisis = models.CharField(max_length=1000)
 
     def __str__(self):
-        return '%s %s' % (self.nombre, self.fecha)
+        return '%s %s %s %s' % (self.id,self.nombre, self.fecha, self.resultado_analisis)
     
