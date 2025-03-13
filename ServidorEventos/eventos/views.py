@@ -5,6 +5,7 @@ from eventos.services.archivoProducer import enviar_mensaje
 from eventos.services.subir_archivos import listar_archivos
 from .logic.logic_analizadorEEG import *
 
+import requests
 
 # Create your views here.
 
@@ -45,3 +46,13 @@ def resultados_eeg(request):
         'lista_archivos': archivos
     }
     return render(request, 'EEG/resultados.html', context)
+
+
+
+def get_data_from_microservice_b():
+    response = requests.get(MICROSERVICE_B_URL)
+    if response.status_code == 200:
+        return response.json()
+    return None
+
+

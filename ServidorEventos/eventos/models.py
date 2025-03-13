@@ -5,7 +5,7 @@ class Evento(models.Model):
     id = models.AutoField(primary_key=True)
     fecha = models.DateTimeField(auto_now_add=True)
     class Meta:
-        abstract = True  # Evita que Django cree una tabla para esta clase
+        abstract = True  
 
 class Examen(Evento):
     nombre = models.CharField(max_length=100) 
