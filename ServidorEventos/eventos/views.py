@@ -94,7 +94,7 @@ def resultados_eeg(request):
 
 def get_examenes_paciente(cedula_paciente):
     try:
-        response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/{cedula_paciente}", timeout=5)
+        response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/{cedula_paciente}", timeout=15)
         response.raise_for_status()
         data = response.json()
         if not data:

@@ -30,6 +30,7 @@ def crear_paciente(request):
 
 @api_view(['GET'])
 def obtener_examenes_paciente(request, cedula_paciente):
+    print("Conexion establecida")
     paciente = get_paciente(cedula_paciente)
     if paciente == None:
         return Response({"error": "Paciente no encontrado"}, status=404)
