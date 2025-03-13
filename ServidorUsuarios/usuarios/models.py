@@ -5,7 +5,7 @@ class Usuario(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100) 
     apellidos = models.CharField(max_length=100)
-    celular = models.IntegerField(max_length=15)
+    celular = models.IntegerField()
     correo = models.CharField(max_length=200)
     cedula = models.CharField(max_length=12)  
     class Meta:
