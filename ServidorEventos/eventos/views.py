@@ -61,7 +61,7 @@ def pag_paciente_examenes(request):
 
 def analisis_eeg(request):
     paciente_data = request.session.get('paciente_data', None)
-    archivos = get_archivos(paciente_data.eventos)
+    archivos = get_archivos(paciente_data['eventos'])
     context = {
         'lista_archivos': archivos
     }
