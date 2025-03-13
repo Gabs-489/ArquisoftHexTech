@@ -16,4 +16,4 @@ class Paciente(Usuario):
     eventos =  models.JSONField(blank=True, default=list)
     
     def __str__(self):
-        return '%s %s' % (self.nombre, self.cedula)
+        return 'Nombre: %s Cedula: %s' % (self.nombre, self.cedula)
