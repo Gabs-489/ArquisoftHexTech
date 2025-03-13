@@ -15,11 +15,11 @@ def pag_inicial(request):
     bucket_name = "examenes_eeg"
     listar_archivos(bucket_name)
     if request.method == 'POST':
-        cedula_paciente = request.POST.get('cedula_paciente')
+        numero_identidad_paciente = request.POST.get('numero_identidad')
 
-        if cedula_paciente:
+        if numero_identidad_paciente:
             # Crear el payload con el nombre y la ruta del archivo
-            datos = get_examenes_paciente(cedula_paciente)
+            datos = get_examenes_paciente(numero_identidad_paciente)
             if datos == None:
                mensaje = "No se encontro un paciente con ese numero de identidad."
                return HttpResponse(f"""<script>
@@ -31,7 +31,7 @@ def pag_inicial(request):
                 request.session['paciente_data'] = datos
                 return redirect('/eventos/EEG')
         else:
-            mensaje = f"Error al obtener los exámenes del paciente con la cedula {cedula_paciente}"
+            mensaje = f"Error al obtener los exámenes del paciente con la cedula {numero_identidad_paciente}"
             return HttpResponse(f"""<script>
                                 alert("{mensaje}");
                                 window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
@@ -86,6 +86,14 @@ def analisis_eeg(request):
 
 def resultados_eeg(request):
     paciente_data = request.session.get('paciente_data', None)
+    if not paciente_data:
+        mensaje = "No se encontró información del paciente."
+        return HttpResponse(f"""<script>
+                                alert("{mensaje}");
+                                window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
+                            </script>
+                            """)
+    
     archivos = get_resultados(paciente_data['eventos'])
     context = {
         'lista_archivos': archivos
@@ -94,9 +102,9 @@ def resultados_eeg(request):
 
 
 
-def get_examenes_paciente(cedula_paciente):
+def get_examenes_paciente(numero_identidad):
     try:
-        response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/pacientes/{cedula_paciente}", timeout=15)
+        response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/pacientes/{numero_identidad}", timeout=15)
         response.raise_for_status()
         data = response.json()
         print(data)
@@ -105,7 +113,7 @@ def get_examenes_paciente(cedula_paciente):
             return None
         return data
     except requests.exceptions.RequestException as e:
-        print(f"Error al obtener los exámenes del paciente con la cedula {cedula_paciente}: {e}")
+        print(f"Error al obtener los exámenes del paciente con la cedula {numero_identidad}: {e}")
         return None
 
 

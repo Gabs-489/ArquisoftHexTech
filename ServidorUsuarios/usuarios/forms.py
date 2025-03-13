@@ -9,7 +9,7 @@ class PacienteForm(forms.ModelForm):
             'apellidos',
             'celular',
             'correo',
-            'cedula'
+            'numero_identidad'
         ]
 
         labels = {
@@ -17,5 +17,5 @@ class PacienteForm(forms.ModelForm):
             'apellidos' : 'Apellidos',
             'celular' : 'Celular',
             'correo' : 'Correo',
-            'cedula' : 'Cedula'
+            'numero_identidad' : 'Numero_identidad'
         }

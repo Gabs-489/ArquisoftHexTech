@@ -28,6 +28,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-body">
+                    {% if lista_archivos|length > 0 %}
                     <table class="table table-hover">
                         <thead>
                         <tr style="color:#0E2EB0">
@@ -57,7 +58,11 @@
 
                         </tbody>
                     </table>
-
+                    {% else %}
+                    <div style="text-align: center; font-weight: bold; color: #0E2EB0; margin-top: 20px;">
+                        No hay Exámenes de EEG disponibles.
+                    </div>
+                    {% endif %}
                     <div style="text-align:center;">
                         <button type="button" class="btn btn-primary waves-effect waves-light"
                                 onClick=" window.location.href='/eventos/EEG' ">

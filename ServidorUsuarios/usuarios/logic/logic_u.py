@@ -4,13 +4,13 @@ def get_pacientes():
     queryset = Paciente.objects.all()
     return (queryset)
 
-def get_resultados_paciente(cedula):
-    paciente = Paciente.objects.get(cedula=cedula)
+def get_resultados_paciente(numero_identidad):
+    paciente = Paciente.objects.get(numero_identidad=numero_identidad)
     return paciente.eventos
 
-def get_paciente(cedula):
+def get_paciente(numero_identidad):
     try:
-        usuario = Paciente.objects.get(cedula=cedula)
+        usuario = Paciente.objects.get(numero_identidad=numero_identidad)
         return (usuario)
     except:
         usuario = None

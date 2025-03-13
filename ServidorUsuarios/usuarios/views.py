@@ -23,7 +23,7 @@ def crear_paciente(request):
             paciente.nombre = data_json['nombre']
             paciente.celular = data_json['celular']
             paciente.correo = data_json['correo']
-            paciente.cedula = data_json['cedula']
+            paciente.cedula = data_json['numero_identidad']
             paciente.save()
             return HttpResponse("successfully created measurement")
         else:
@@ -31,11 +31,11 @@ def crear_paciente(request):
 
 
 @api_view(['GET'])
-def obtener_examenes_paciente(request, cedula_paciente):
+def obtener_examenes_paciente(request, numero_identidad_paciente):
     print("Conexion establecida")
-    paciente = get_paciente(cedula_paciente)
+    paciente = get_paciente(numero_identidad_paciente)
     if paciente == None:
         return Response({"error": "Paciente no encontrado"}, status=404)
     serializer = Paciente_serializer(paciente)
-    print("Retornando paciente con cedula",cedula_paciente)
+    print("Retornando paciente con cedula",numero_identidad_paciente)
     return Response(serializer.data)

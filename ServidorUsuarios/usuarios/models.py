@@ -6,7 +6,7 @@ class Usuario(models.Model):
     apellidos = models.CharField(max_length=100)
     celular = models.IntegerField()
     correo = models.CharField(max_length=200)
-    cedula = models.CharField(max_length=12)  
+    numero_identidad = models.CharField(max_length=12)  
     class Meta:
         abstract = True 
 
@@ -15,4 +15,4 @@ class Paciente(Usuario):
     eventos =  models.JSONField(blank=True, default=list)
     
     def __str__(self):
-        return '%s %s, Cedula: %s' % (self.nombre,self.apellidos, self.cedula)
+        return '%s %s, Numero de Identidad: %s' % (self.nombre,self.apellidos, self.numero_identidad)
