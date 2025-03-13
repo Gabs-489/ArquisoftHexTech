@@ -1,6 +1,6 @@
 from ..models import EEG
 
-def get_archivos():
+def get_archivos(id_examenes):
     queryset = EEG.objects.all().order_by('-fecha')[:10]
     return (queryset)
 

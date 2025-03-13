@@ -141,8 +141,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Conexion otros microservicios
-import os
 
-MICROSERVICE_B_URL = os.getenv('MICROSERVICE_B_URL', 'http://localhost:8080')  # Valor por defecto
+MICROSERVICIO_USUARIOS_URL = os.getenv('MICROSERVICE_B_URL', 'http://localhost:8080')  # Valor por defecto
 
 

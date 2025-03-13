@@ -27,14 +27,15 @@
     <div class="page-content-wrapper">
         <div class="container">
             <!-- Content page -->
-            <h5>Bienvenido al análisis EEG</h5>
+            <h5>Bienvenido al análisis EEG para el </h5>
             <div class="center-buttons">
                 <form method="POST" >
                     {% csrf_token %}
-                    <label for="cedula_paciente">Numero de identidad del Paciente:</label>
-                    <input type="text" name="cedula_paciente" id="cedula_paciente" required>
-                    <button class="button-blue" type="submit">Buscar</button>
+                    <button class="button-blue" type="submit">Iniciar Análisis EEG</button>
                 </form>
+                
+                <button class="button-blue" onclick="window.location.href='/eventos/EEG/resultados'">Ver Resultados EEG</button>
+
             </div>
             <div style="text-align:center;">
                 <button type="button" class="btn btn-primary waves-effect waves-light"
