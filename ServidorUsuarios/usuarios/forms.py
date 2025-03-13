@@ -6,6 +6,7 @@ class PacienteForm(forms.ModelForm):
         model = Paciente
         fields = [
             'nombre',
+            'apellidos',
             'celular',
             'correo',
             'cedula'
@@ -13,6 +14,7 @@ class PacienteForm(forms.ModelForm):
 
         labels = {
             'nombre' : 'Nombre',
+            'apellidos' : 'Apellidos',
             'celular' : 'Celular',
             'correo' : 'Correo',
             'cedula' : 'Cedula'

@@ -139,3 +139,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'media')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Conexion otros microservicios
+MICROSERVICE_B_URL = "http://microservice-b:8000/api/data/"
+
