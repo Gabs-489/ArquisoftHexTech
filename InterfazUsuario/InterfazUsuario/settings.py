@@ -134,7 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Conexion otros microservicios
 
-PATH_API_GATEWAY = "http://" + os.environ.get("KONG_HOST", "10.128.0.10") + ":" + os.environ.get("KONG_PORT", "8000")
+PATH_API_GATEWAY = "http://" + os.environ.get("KONG_HOST", "10.128.0.7") + ":" + os.environ.get("KONG_PORT", "8000")
 MICROSERVICIO_EVENTOS_URL = PATH_API_GATEWAY + "/eventos"
 MICROSERVICIO_USUARIOS_URL = PATH_API_GATEWAY + "/variables"
 
