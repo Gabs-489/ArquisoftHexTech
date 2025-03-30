@@ -66,13 +66,11 @@ def solicitar_analisis(request,id_examen):
 @api_view(['GET'])
 def analisis_eeg(request):
     eventos_json = request.GET.get("eventos", "[]")  # Obtener la lista de exámenes en JSON
-    print(eventos_json)
     print("Iniciando busqueda de examenes")
     try:
         eventos = json.loads(eventos_json)  # Convertir a lista de Python
         if isinstance(eventos, list) and all(isinstance(num, int) for num in eventos):
             archivos = get_archivos(eventos)  # Obtener los exámenes desde la BD
-            print(archivos)
             serializer = Examen_serializer(archivos, many=True)
             return Response({"success": True, "examenes": serializer.data})  # Serializar el QuerySet
         else:
@@ -102,7 +100,6 @@ def get_examenes_paciente(numero_identidad):
         response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/pacientes/{numero_identidad}", timeout=100)
         response.raise_for_status()
         data = response.json()
-        print(data)
         if not data:
             print("El paciente con ese numero de documento de identidad, no existe.")
             return None

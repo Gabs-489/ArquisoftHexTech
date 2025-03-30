@@ -22,6 +22,8 @@ services:
         paths:
           - /usuarios/pacientes
           - /usuarios/pacientes/<str:numero_identidad_paciente>
+          - /usuarios/historias_usuario
+          - /usuarios/historias_usuario/<str:numero_identidad_paciente>
         strip_path: false
 
   - name: eventos_service

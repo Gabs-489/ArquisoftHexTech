@@ -21,11 +21,10 @@ def cargar_eventos(request):
 
         data = response.json() 
         success = data.get("success", False)
-        print(success)
 
         if (success):
             if request.method == 'POST':
-                numero_identidad_paciente = request.POST.get('numero_identidad',)
+                numero_identidad_paciente = request.POST.get('numero_identidad')
 
                 if numero_identidad_paciente:
                     datos = get_examenes_paciente(numero_identidad_paciente)
@@ -156,7 +155,6 @@ def get_examenes_eeg(eventos):
         params = {"eventos": json.dumps(eventos)} 
         response = requests.get(f"{MICROSERVICIO_EVENTOS_URL}/EEG/analisis", params=params)
         
-        print(response.json().get('examenes', []))
         if response.status_code == 200:
             response_data = response.json()
             return response_data.get('examenes', [])  # Devolver la respuesta en formato JSON

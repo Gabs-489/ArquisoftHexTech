@@ -40,3 +40,23 @@ def obtener_examenes_paciente(request, numero_identidad_paciente):
     serializer = Paciente_serializer(paciente)
     print("Retornando paciente con cedula",numero_identidad_paciente)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def obtener_historias_de_pacientes(request):
+    numero_identidad_paciente = 0
+    paciente = get_paciente(numero_identidad_paciente)
+    if paciente == None:
+        return Response({"error": "Paciente no encontrado"}, status=404)
+    serializer = Paciente_serializer(paciente)
+    print("Retornando paciente con cedula",numero_identidad_paciente)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def obtener_historia_de_un_paciente(request, numero_identidad_paciente):
+
+    paciente = get_paciente(numero_identidad_paciente)
+    if paciente == None:
+        return Response({"error": "Paciente no encontrado"}, status=404)
+    serializer = Paciente_serializer(paciente)
+    print("Retornando paciente con cedula",numero_identidad_paciente)
+    return Response(serializer.data)
