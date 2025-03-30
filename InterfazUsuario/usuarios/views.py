@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import requests
 
-from InterfazUsuario.InterfazUsuario.settings import MICROSERVICIO_USUARIOS_URL
+from InterfazUsuario.settings import MICROSERVICIO_USUARIOS_URL
 
 # Create your views here.
 
