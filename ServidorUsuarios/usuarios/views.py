@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import requests
 
-from ServidorUsuarios.ServidorUsuarios.settings import HISTORIAS_CLINICAS_API
+from ServidorUsuarios.settings import HISTORIAS_CLINICAS_API
 from usuarios.serializers import Paciente_serializer
 
 from .logic.logic_u import get_paciente
