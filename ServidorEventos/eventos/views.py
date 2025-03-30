@@ -2,7 +2,7 @@ import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 
-from ServidorEventos.eventos.serializers import Examen_serializer
+from .serializers import Examen_serializer
 from ServidorEventos.settings import MICROSERVICIO_USUARIOS_URL
 from eventos.services.archivoProducer import enviar_mensaje
 from eventos.services.subir_archivos import listar_archivos
