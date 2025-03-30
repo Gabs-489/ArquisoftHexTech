@@ -142,7 +142,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Conexion otros microservicios
-PATH_API_GATEWAY = "http://" + os.environ.get("KONG_HOST", "10.128.0.10") + ":" + os.environ.get("KONG_PORT", "8000")
-MICROSERVICIO_USUARIOS_URL = PATH_API_GATEWAY + "/variables"
+PATH_API_GATEWAY = "http://" + os.environ.get("KONG_HOST", "10.128.0.7") + ":" + os.environ.get("KONG_PORT", "8000")
+MICROSERVICIO_USUARIOS_URL = PATH_API_GATEWAY + "/usuarios"
 
 
