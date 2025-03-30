@@ -16,6 +16,7 @@ from rest_framework.decorators import api_view
 #Cargar todos los examenes
 @api_view(['GET'])
 def cargar_examenes(request):
+    print("Conexion establecida")
     bucket_name = "examenes_eeg"
     try:
         listar_archivos(bucket_name)
