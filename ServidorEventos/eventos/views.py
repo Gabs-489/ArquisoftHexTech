@@ -65,6 +65,8 @@ def solicitar_analisis(request,id_examen):
 @api_view(['GET'])
 def analisis_eeg(request):
     eventos_json = request.GET.get("eventos", "[]")  # Obtener la lista de exámenes en JSON
+    print(eventos_json)
+    print("Iniciando busqueda de examenes")
     try:
         eventos = json.loads(eventos_json)  # Convertir a lista de Python
         if isinstance(eventos, list) and all(isinstance(num, int) for num in eventos):
