@@ -38,7 +38,7 @@ def cargar_eventos(request):
                                     """) 
                     else: 
                         request.session['paciente_data'] = datos
-                        return redirect('/eventos/EEG')
+                        return redirect('/interfaz/eventos/EEG')
                 else:
                     mensaje = f"Error al obtener los exámenes del paciente con el numero de identidad {numero_identidad_paciente}"
                     return HttpResponse(f"""<script>
@@ -78,7 +78,7 @@ def pag_paciente_examenes(request):
         }
 
     if request.method == 'POST':
-        return redirect('/eventos/EEG/analisis')
+        return redirect('/interfaz/eventos/EEG/analisis')
     return render(request, 'EEG/pag_paciente_examenes_EEG.html',context)
 
 
@@ -102,7 +102,7 @@ def analisis_eeg(request):
                 mensaje = "No se pudo enviar la solicitud de analisis."
         return HttpResponse(f"""<script>
                                 alert("{mensaje}");
-                                window.location.href = "/eventos/EEG/analisis";  // Redirigir a la página principal o donde desees
+                                window.location.href = "/interfaz/eventos/EEG/analisis";  // Redirigir a la página principal o donde desees
                             </script>
                             """)
     return render(request, 'EEG/archivos.html', context)
