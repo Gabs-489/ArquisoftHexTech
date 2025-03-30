@@ -1,7 +1,9 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
+import requests
 
+from ServidorUsuarios.ServidorUsuarios.settings import HISTORIAS_CLINICAS_API
 from usuarios.serializers import Paciente_serializer
 
 from .logic.logic_u import get_paciente
@@ -43,20 +45,32 @@ def obtener_examenes_paciente(request, numero_identidad_paciente):
 
 @api_view(['GET'])
 def obtener_historias_de_pacientes(request):
-    numero_identidad_paciente = 0
-    paciente = get_paciente(numero_identidad_paciente)
-    if paciente == None:
-        return Response({"error": "Paciente no encontrado"}, status=404)
-    serializer = Paciente_serializer(paciente)
-    print("Retornando paciente con cedula",numero_identidad_paciente)
-    return Response(serializer.data)
+    try: 
+        response =  requests.get(f"{HISTORIAS_CLINICAS_API}/api/historias_clinicas/historias/", timeout=20) 
+
+        if response.status_code == 404:
+            return Response({"error": "Historias Clinicas no encontradas"}, status=404)
+    
+        if response.status_code == 200:
+            return Response(response.json()) 
+        
+        return Response({"error": "Error en la obtención de historias clínicas"}, status=response.status_code)
+
+    except requests.exceptions.RequestException as e:
+        return Response({"error": str(e)}, status=500)
 
 @api_view(['GET'])
 def obtener_historia_de_un_paciente(request, numero_identidad_paciente):
+    try:
+        response = requests.get(f"{HISTORIAS_CLINICAS_API}/api/historias_clinicas/historias/{numero_identidad_paciente}/", timeout=20)
 
-    paciente = get_paciente(numero_identidad_paciente)
-    if paciente == None:
-        return Response({"error": "Paciente no encontrado"}, status=404)
-    serializer = Paciente_serializer(paciente)
-    print("Retornando paciente con cedula",numero_identidad_paciente)
-    return Response(serializer.data)
+        if response.status_code == 404:
+            return Response({"error": "Paciente no encontrado"}, status=404)
+        
+        if response.status_code == 200:
+            return Response(response.json())  
+        
+        return Response({"error": "Error en la obtención de historias clínicas"}, status=response.status_code)
+
+    except requests.exceptions.RequestException as e:
+        return Response({"error": str(e)}, status=500)
