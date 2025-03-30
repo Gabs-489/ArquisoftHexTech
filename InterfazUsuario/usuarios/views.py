@@ -6,7 +6,7 @@ from InterfazUsuario.settings import MICROSERVICIO_USUARIOS_URL
 # Create your views here.
 
 def pag_principal(request):
-    return render(request, 'ususarios/borrador.html')
+    return render(request, 'usuarios/borrador.html')
 
 def todas_historias_clinicas(request):
     response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/historias_usuario", timeout=20)
