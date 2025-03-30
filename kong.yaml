@@ -12,6 +12,9 @@ services:
           - /interfaz/eventos/EEG/analisis
           - /interfaz/eventos/EEG
           - /interfaz/eventos/EEG/resultados
+          - /interfaz/usuarios
+          - /interfaz/usuarios/historiasClinicas
+          - /interfaz/usuarios/HC_paciente
         strip_path: false
 
   - name: usuarios_service
