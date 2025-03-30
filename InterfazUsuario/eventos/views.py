@@ -33,7 +33,7 @@ def cargar_eventos(request):
                         mensaje = "No se encontro un paciente con ese numero de identidad."
                         return HttpResponse(f"""<script>
                                         alert("{mensaje}");
-                                        window.location.href = "/interfaz/eventos/";  // Redirigir a la página principal o donde desees
+                                        window.location.href = "/interfaz/eventos";  // Redirigir a la página principal o donde desees
                                     </script>
                                     """) 
                     else: 
@@ -43,7 +43,7 @@ def cargar_eventos(request):
                     mensaje = f"Error al obtener los exámenes del paciente con el numero de identidad {numero_identidad_paciente}"
                     return HttpResponse(f"""<script>
                                         alert("{mensaje}");
-                                        window.location.href = "/interfaz/eventos/";  // Redirigir a la página principal o donde desees
+                                        window.location.href = "/interfaz/eventos";  // Redirigir a la página principal o donde desees
                                     </script>
                                     """) 
             return render(request, 'EEG/pag_principal.html')
@@ -70,7 +70,7 @@ def pag_paciente_examenes(request):
         mensaje = "No se encontró información del paciente."
         return HttpResponse(f"""<script>
                                 alert("{mensaje}");
-                                window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
+                                window.location.href = "/interfaz/eventos";  // Redirigir a la página principal o donde desees
                             </script>
                             """)
     context = {
@@ -114,7 +114,7 @@ def resultados_eeg(request):
         mensaje = "No se encontró información del paciente."
         return HttpResponse(f"""<script>
                                 alert("{mensaje}");
-                                window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
+                                window.location.href = "/interfaz/eventos";  // Redirigir a la página principal o donde desees
                             </script>
                             """)
     
