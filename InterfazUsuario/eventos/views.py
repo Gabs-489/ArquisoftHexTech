@@ -14,7 +14,9 @@ import requests
 
 #Cargar todos los examenes
 def cargar_eventos(request):
+    print("iniciando conexion", MICROSERVICIO_EVENTOS_URL)
     try:
+        
         response = requests.get(f"{MICROSERVICIO_EVENTOS_URL}", timeout=20)
 
         data = response.json() 
