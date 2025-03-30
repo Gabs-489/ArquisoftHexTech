@@ -10,7 +10,9 @@ def pag_principal(request):
 
 def todas_historias_clinicas(request):
     response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/historias_usuario", timeout=20)
+    print(response)
 
 def historia_clinica_por_paciente(request):
     numero_identidad = 0
     response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/historias_usuario/{numero_identidad}", timeout=20)
+    print(response)
