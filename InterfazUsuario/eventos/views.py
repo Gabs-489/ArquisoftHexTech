@@ -155,7 +155,7 @@ def get_examenes_eeg(eventos):
     try:
         params = {"eventos": json.dumps(eventos)} 
         response = requests.get(f"{MICROSERVICIO_EVENTOS_URL}/EEG/analisis", params=params)
-        print(response)
+        print(response.json())
         if response.status_code == 200:
             return response.json()  # Devolver la respuesta en formato JSON
         

@@ -2,6 +2,7 @@ import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 
+from ServidorEventos.eventos.serializers import Examen_serializer
 from ServidorEventos.settings import MICROSERVICIO_USUARIOS_URL
 from eventos.services.archivoProducer import enviar_mensaje
 from eventos.services.subir_archivos import listar_archivos
@@ -71,7 +72,9 @@ def analisis_eeg(request):
         eventos = json.loads(eventos_json)  # Convertir a lista de Python
         if isinstance(eventos, list) and all(isinstance(num, int) for num in eventos):
             archivos = get_archivos(eventos)  # Obtener los exámenes desde la BD
-            return Response({"success": True, "examenes": list(archivos.values())})  # Serializar el QuerySet
+            print(archivos)
+            serializer = Examen_serializer(archivos, many=True)
+            return Response({"success": True, "examenes": serializer.data})  # Serializar el QuerySet
         else:
             return Response({"success": False, "error": "Formato incorrecto"}, status=400)
     except json.JSONDecodeError:
