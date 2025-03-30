@@ -1,0 +1,23 @@
+{% extends 'principal/base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/pag_principal/style.css' %}">
+{% endblock %}
+{% block content %}
+
+    <div style=" display: flex; align-items: center; justify-content: center;" class="login-box auth0-box before">
+            <img style="width:50%; " src="/static/media/analisis.jpg" />
+    </div>
+    <br>
+    <div style=" display: flex; align-items: center; justify-content: center;" class="login-box auth0-box before">
+        <a href="/eventos/" class="button-link">
+            <button class="button-blue">Eventos</button>
+        </a>
+        <a href="/usuarios/" class="button-link">
+            <button class="button-blue">Pacientes</button>
+        </a>
+    </div>
+
+
+
+{% endblock %}

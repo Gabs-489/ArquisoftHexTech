@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+            <h4 class="page-title">Analisis EEG</h4>
+            <!--- 
+            <div style="text-align:right;">
+                <button type="button" class="btn btn-success waves-effect waves-light"
+                        onClick=" window.location.href='/measurementcreate' " style="text-align:center;">+
+                </button>
+            </div>
+            --->
+        </div>
+    </div>
+
+    <br>
+
+    <div class="page-content-wrapper">
+        <div class="container">
+            <!-- Content page -->
+            <h5>Bienvenido al análisis EEG para el paciente: {{paciente.nombre}} {{paciente.apellidos}}</h5>
+            <div class="center-buttons">
+                <form method="POST" >
+                    {% csrf_token %}
+                    <button class="button-blue" type="submit">Iniciar Análisis EEG</button>
+                </form>
+                
+                <button class="button-blue" onclick="window.location.href='/eventos/EEG/resultados'">Ver Resultados EEG</button>
+
+            </div>
+            <div style="text-align:center;">
+                <button type="button" class="btn btn-primary waves-effect waves-light"
+                        onClick=" window.location.href='/eventos' ">
+                    Back
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

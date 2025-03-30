@@ -30,6 +30,7 @@ def crear_paciente(request):
             return HttpResponse("unsuccessfully created measurement. Variable or place does not exist")
 
 
+
 @api_view(['GET'])
 def obtener_examenes_paciente(request, numero_identidad_paciente):
     print("Conexion establecida")

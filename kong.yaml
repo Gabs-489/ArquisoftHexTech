@@ -1,0 +1,54 @@
+_format_version: "2.1"
+
+services:
+  - name: interfaz_service
+    host: interfaz_upstream
+    protocol: http
+    routes:
+      - name: interfaz
+        paths:
+          - /
+          - /interfaz/eventos
+          - /interfaz/eventos/EEG/analisis
+          - /interfaz/eventos/EEG
+          - /interfaz/eventos/EEG/resultados
+        strip_path: false
+
+  - name: usuarios_service
+    host: usuarios_upstream
+    protocol: http
+    routes:
+      - name: usuarios
+        paths:
+          - /pacientes
+          - /pacientes/<str:numero_identidad_paciente>
+        strip_path: false
+
+  - name: eventos_service
+    host: eventos_upstream
+    protocol: http
+    routes:
+      - name: eventos
+        paths:
+          - /eventos
+          - /eventos/<str:numero_identidad_paciente>
+          - /eventos/EEG/analisis
+          - /eventos/EEG/analisis/<str:id_examen>
+          - /eventos/EEG/resultados
+        strip_path: false
+    
+upstreams:
+  - name: interfaz_upstream
+    targets:
+      - target: 10.128.0.6:8080
+        weight: 100
+        
+  - name: usuarios_upstream
+    targets:
+      - target: 10.128.0.5:8080
+        weight: 100
+
+  - name: eventos_upstream
+    targets:
+      - target: 10.128.0.2:8080
+        weight: 100

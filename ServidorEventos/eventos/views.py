@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 
@@ -7,98 +8,85 @@ from eventos.services.subir_archivos import listar_archivos
 from .logic.logic_analizadorEEG import *
 
 import requests
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
 #Cargar todos los examenes
-def pag_inicial(request):
+@api_view(['GET'])
+def cargar_examenes(request):
     bucket_name = "examenes_eeg"
-    listar_archivos(bucket_name)
-    if request.method == 'POST':
-        numero_identidad_paciente = request.POST.get('numero_identidad')
+    try:
+        listar_archivos(bucket_name)
+        success = True 
+    except Exception as e:
+        success = False  
+        print(f"Error al cargar los exámenes: {e}")  
+    return Response({"success": success})
 
-        if numero_identidad_paciente:
-            # Crear el payload con el nombre y la ruta del archivo
-            datos = get_examenes_paciente(numero_identidad_paciente)
-            if datos == None:
-               mensaje = "No se encontro un paciente con ese numero de identidad."
-               return HttpResponse(f"""<script>
-                                alert("{mensaje}");
-                                window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
-                            </script>
-                            """) 
-            else: 
-                request.session['paciente_data'] = datos
-                return redirect('/eventos/EEG')
-        else:
-            mensaje = f"Error al obtener los exámenes del paciente con el numero de identidad {numero_identidad_paciente}"
-            return HttpResponse(f"""<script>
-                                alert("{mensaje}");
-                                window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
-                            </script>
-                            """) 
-    return render(request, 'EEG/pag_principal.html')
-
-
-
-def pag_paciente_examenes(request):
-    paciente_data = request.session.get('paciente_data', None)
-
-    if not paciente_data:
-        mensaje = "No se encontró información del paciente."
-        return HttpResponse(f"""<script>
-                                alert("{mensaje}");
-                                window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
-                            </script>
-                            """)
-    context = {
-        'paciente' : paciente_data
-        }
-
-    if request.method == 'POST':
-        return redirect('/eventos/EEG/analisis')
-    return render(request, 'EEG/pag_paciente_examenes_EEG.html',context)
-
-def analisis_eeg(request):
-    paciente_data = request.session.get('paciente_data', None)
-    archivos = get_archivos(paciente_data['eventos'])
-    context = {
-        'lista_archivos': archivos
-    }
-    if request.method == 'POST':
-        file_id = request.POST.get('file_id')
-        file_path = request.POST.get('file_path')
-
-        if file_id and file_path:
-            # Crear el payload con el nombre y la ruta del archivo
-            payload ="{'id': '%s', 'path': '%s'}" % (file_id, file_path)
-            enviar_mensaje(payload,file_id)
-            mensaje = "Se envio con exito la solicitud de analisis."
-        else:
-            mensaje = "No se pudo enviar la solicitud de analisis."
-        return HttpResponse(f"""<script>
-                                alert("{mensaje}");
-                                window.location.href = "/eventos/EEG/analisis";  // Redirigir a la página principal o donde desees
-                            </script>
-                            """)
-
-    return render(request, 'EEG/archivos.html', context)
-
-def resultados_eeg(request):
-    paciente_data = request.session.get('paciente_data', None)
-    if not paciente_data:
-        mensaje = "No se encontró información del paciente."
-        return HttpResponse(f"""<script>
-                                alert("{mensaje}");
-                                window.location.href = "/eventos/";  // Redirigir a la página principal o donde desees
-                            </script>
-                            """)
+@api_view(['GET'])
+def examenes_paciente(request, numero_identidad_paciente):
+    if numero_identidad_paciente:
+        # Crear el payload con el nombre y la ruta del archivo
+        datos = get_examenes_paciente(numero_identidad_paciente)
+        if datos == None:
+            return Response({
+                "success": False,
+                "message": "No se encontró un paciente con ese número de identidad."
+            }, status=404)
+        
+        return Response({
+            "success": True,
+            "data": datos
+        }, status=200)
     
-    archivos = get_resultados(paciente_data['eventos'])
-    context = {
-        'lista_archivos': archivos
-    }
-    return render(request, 'EEG/resultados.html', context)
+    else:
+        return Response({
+            "success": False,
+            "message": "Número de identidad no proporcionado."
+        }, status=400)
+
+
+#Solicitar el analisis
+@api_view(['POST'])
+def solicitar_analisis(request,id_examen):
+    examen = get_archivo(id_examen)
+    if examen == None:
+        return Response({"success": False, "error": "No se encontro el examen"}, status=404)
+    
+    payload ="{'id': '%s', 'path': '%s'}" % (examen.id, examen.path)
+    enviar_mensaje(payload,examen.id)
+    mensaje = "Se envio con exito la solicitud de analisis."
+    return Response({"success": True, "mensaje":mensaje},status=200)
+
+
+@api_view(['GET'])
+def analisis_eeg(request):
+    eventos_json = request.GET.get("eventos", "[]")  # Obtener la lista de exámenes en JSON
+    try:
+        eventos = json.loads(eventos_json)  # Convertir a lista de Python
+        if isinstance(eventos, list) and all(isinstance(num, int) for num in eventos):
+            archivos = get_archivos(eventos)  # Obtener los exámenes desde la BD
+            return Response({"success": True, "examenes": list(archivos.values())})  # Serializar el QuerySet
+        else:
+            return Response({"success": False, "error": "Formato incorrecto"}, status=400)
+    except json.JSONDecodeError:
+        return Response({"success": False, "error": "JSON inválido"}, status=400)   
+    
+
+@api_view(['GET'])
+def resultados_eeg(request):
+    eventos_json = request.GET.get("eventos", "[]")  # Obtener la lista de exámenes en JSON
+    try:
+        eventos = json.loads(eventos_json)  # Convertir a lista de Python
+        if isinstance(eventos, list) and all(isinstance(num, int) for num in eventos):
+            archivos = get_resultados(eventos)  # Obtener los exámenes desde la BD
+            return Response({"success": True, "examenes": list(archivos.values())})  # Serializar el QuerySet
+        else:
+            return Response({"success": False, "error": "Formato incorrecto"}, status=400)
+    except json.JSONDecodeError:
+        return Response({"success": False, "error": "JSON inválido"}, status=400)   
 
 
 
