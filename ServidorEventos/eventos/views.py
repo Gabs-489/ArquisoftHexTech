@@ -93,6 +93,7 @@ def resultados_eeg(request):
 
 def get_examenes_paciente(numero_identidad):
     try:
+        print("Inicia busqueda Paciente")
         response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/pacientes/{numero_identidad}", timeout=100)
         response.raise_for_status()
         data = response.json()

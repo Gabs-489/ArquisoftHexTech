@@ -20,8 +20,8 @@ services:
     routes:
       - name: usuarios
         paths:
-          - /pacientes
-          - /pacientes/<str:numero_identidad_paciente>
+          - /usuarios/pacientes
+          - /usuarios/pacientes/<str:numero_identidad_paciente>
         strip_path: false
 
   - name: eventos_service
