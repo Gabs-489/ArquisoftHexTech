@@ -15,7 +15,7 @@ def todas_historias_clinicas(request):
     context = {
         'historiasClinicas' : historias
         }
-    return render(request, 'usuarios/HistoriasClinicas.html',context)
+    return render(request, 'usuarios/HistoriaClinicas.html',context)
 
 def historia_clinica_por_paciente(request):
 
