@@ -32,6 +32,7 @@ def historia_clinica_por_paciente(request):
                                         """) 
                     else: 
                         historias = response.json()
+                        print(historias)
                         context = {
                                     'historiasClinicas' : historias
                                     }
