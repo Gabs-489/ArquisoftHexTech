@@ -9,7 +9,7 @@
 <div class="container">
     <h2 class="text-center mt-4" style="color:#0E2EB0;">Historias Clínica Por Paciente</h2>
 
-    <div class="page-content-wrapper">
+    <div class="page-content-wrapper justify-content-center">
         <div class="container">
             <div class="center-buttons">
                 <form method="POST" >
@@ -22,15 +22,16 @@
             <br>
             <div style="text-align:center;">
                 <button type="button" class="btn btn-primary waves-effect waves-light"
-                        onClick=" window.location.href='/' ">
+                        onClick=" window.location.href='/interfaz/usuarios' ">
                     Back
                 </button>
             </div>
+            <br>
         </div>
     </div>
 
     {% if historiasClinicas %}
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mt-4">
         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
             <div class="card border-primary shadow-sm">
                 <div class="card-body">
