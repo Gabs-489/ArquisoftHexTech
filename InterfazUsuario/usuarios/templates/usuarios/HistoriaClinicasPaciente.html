@@ -19,6 +19,7 @@
                     <button class="button-blue" type="submit">Buscar</button>
                 </form>
             </div>
+            <br>
             <div style="text-align:center;">
                 <button type="button" class="btn btn-primary waves-effect waves-light"
                         onClick=" window.location.href='/' ">
@@ -28,10 +29,9 @@
         </div>
     </div>
 
-    --Segunda Division
-    {% if historiaClinica %}
+    {% if historiasClinicas %}
     <div class="row justify-content-center">
-        {% for historia in historiaClinica %}
+        {% for historia in historiasClinicas %}
         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
             <div class="card border-primary shadow-sm">
                 <div class="card-body">
