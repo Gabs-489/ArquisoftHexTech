@@ -1,0 +1,32 @@
+{% extends 'principal/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/pag_principal/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mt-4" style="color:#0E2EB0;">Historias Clínicas</h2>
+    
+    <div class="row justify-content-center">
+        {% for historia in historias %}
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card border-primary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:#0E2EB0; font-weight: bold;">{{ historia.nombre_paciente }}</h5>
+                    <p class="card-text"><strong>Edad:</strong> {{ historia.edad }}</p>
+                    <p class="card-text"><strong>Identificación:</strong> {{ historia.identificacion }}</p>
+                    <p class="card-text"><strong>Procedencia:</strong> {{ historia.procedencia }}</p>
+                    <p class="card-text"><strong>Ocupación:</strong> {{ historia.ocupacion }}</p>
+                    <p class="card-text"><strong>Acompañante:</strong> {{ historia.acompanante }}</p>
+                    <p class="card-text"><strong>Motivo de consulta:</strong> {{ historia.motivo_consulta }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center w-100" style="color:#0E2EB0; font-weight: bold;">No hay historias clínicas disponibles.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
