@@ -7,10 +7,31 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="text-center mt-4" style="color:#0E2EB0;">Historias Clínicas</h2>
-    
+    <h2 class="text-center mt-4" style="color:#0E2EB0;">Historias Clínica Por Paciente</h2>
+
+    <div class="page-content-wrapper">
+        <div class="container">
+            <div class="center-buttons">
+                <form method="POST" >
+                    {% csrf_token %}
+                    <label for="numero_identidad">Numero de identidad del Paciente:</label>
+                    <input type="text" name="numero_identidad" id="numero_identidad" required>
+                    <button class="button-blue" type="submit">Buscar</button>
+                </form>
+            </div>
+            <div style="text-align:center;">
+                <button type="button" class="btn btn-primary waves-effect waves-light"
+                        onClick=" window.location.href='/' ">
+                    Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    --Segunda Division
+    {% if historiaClinica %}
     <div class="row justify-content-center">
-        {% for historia in historiasClinicas %}
+        {% for historia in historiaClinica %}
         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
             <div class="card border-primary shadow-sm">
                 <div class="card-body">
@@ -28,5 +49,6 @@
         <p class="text-center w-100" style="color:#0E2EB0; font-weight: bold;">No hay historias clínicas disponibles.</p>
         {% endfor %}
     </div>
+    {% endif %}
 </div>
 {% endblock %}
