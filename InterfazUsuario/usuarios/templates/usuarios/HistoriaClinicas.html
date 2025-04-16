@@ -40,5 +40,14 @@
             Back
         </button>
     </div>
+
+    {% if messages %}
+    <div class="alert alert-warning">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
 </div>
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseServerError
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.contrib import messages
 import requests
 
 from InterfazUsuario.settings import MICROSERVICIO_USUARIOS_URL
@@ -16,7 +17,8 @@ def todas_historias_clinicas(request):
         historias = response.json()
         
         if not historias:  # Si la lista está vacía
-            return HttpResponseServerError("Servicio de usuarios no tiene historias clínicas disponibles")
+            messages.warning(request, "No hay historias clínicas disponibles.")
+            return redirect(request.META.get('HTTP_REFERER', 'default_url'))
 
         context = {
             'historiasClinicas': historias
