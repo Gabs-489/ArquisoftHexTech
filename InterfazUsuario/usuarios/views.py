@@ -30,7 +30,12 @@ def todas_historias_clinicas(request):
         return render(request, 'usuarios/HistoriaClinicas.html', context)
 
     except Exception as e:
-        return HttpResponseServerError(f"Error al obtener historias clínicas: {str(e)}")
+        mensaje = f"Error al obtener historias clínicas: {str(e)}"
+        return HttpResponse(f"""<script>
+                                    alert("{mensaje}");
+                                    window.location.href = "/interfaz/usuarios";  // Redirigir a la página principal o donde desees
+                                </script>
+                                """)
 
 def historia_clinica_por_paciente(request):
 
