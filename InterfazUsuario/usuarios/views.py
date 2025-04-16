@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from django.shortcuts import render
 import requests
 
@@ -10,12 +10,21 @@ def pag_principal(request):
     return render(request, 'usuarios/pag_principal.html')
 
 def todas_historias_clinicas(request):
-    response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/historias_usuario", timeout=20)
-    historias = response.json()
-    context = {
-        'historiasClinicas' : historias
+    try:
+        response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/historias_usuario", timeout=20)
+        response.raise_for_status()  # lanza error si status != 200
+        historias = response.json()
+        
+        if not historias:  # Si la lista está vacía
+            return HttpResponseServerError("Servicio de usuarios no tiene historias clínicas disponibles")
+
+        context = {
+            'historiasClinicas': historias
         }
-    return render(request, 'usuarios/HistoriaClinicas.html',context)
+        return render(request, 'usuarios/HistoriaClinicas.html', context)
+
+    except Exception as e:
+        return HttpResponseServerError(f"Error al obtener historias clínicas: {str(e)}")
 
 def historia_clinica_por_paciente(request):
 
