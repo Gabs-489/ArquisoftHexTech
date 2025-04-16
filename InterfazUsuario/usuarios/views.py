@@ -17,9 +17,13 @@ def todas_historias_clinicas(request):
         historias = response.json()
         
         if not historias:  # Si la lista está vacía
-            messages.warning(request, "No hay historias clínicas disponibles.")
-            return redirect(request.META.get('HTTP_REFERER', 'default_url'))
-
+            mensaje = "No hay historias clínicas disponibles. Puede ser una falla del servidor de Usuarios."
+            return HttpResponse(f"""<script>
+                                    alert("{mensaje}");
+                                    window.location.href = "/interfaz/usuarios";  // Redirigir a la página principal o donde desees
+                                </script>
+                                """)
+ 
         context = {
             'historiasClinicas': historias
         }

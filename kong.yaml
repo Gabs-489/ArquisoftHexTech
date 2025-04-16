@@ -59,7 +59,7 @@ upstreams:
       - target: 10.128.0.14:8080
         weight: 100
     healthchecks:
-      threshold: 25
+      threshold: 30
       active:
         http_path: /health/
         timeout: 10
