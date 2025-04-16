@@ -31,6 +31,10 @@ def todas_historias_clinicas(request):
 
     except Exception as e:
         mensaje = f"Error al obtener historias clínicas: {str(e)}"
+
+        if mensaje == "Service Temporarily Unavailable for url: http://10.128.0.8:8000/usuarios/historias_usuario":
+             mandar_mensaje_advertencia()
+             
         return HttpResponse(f"""<script>
                                     alert("{mensaje}");
                                     window.location.href = "/interfaz/usuarios";  // Redirigir a la página principal o donde desees
@@ -59,3 +63,6 @@ def historia_clinica_por_paciente(request):
                         return render(request, 'usuarios/HistoriaClinicasPaciente.html',context)
     
     return render(request, 'usuarios/HistoriaClinicasPaciente.html')
+
+def mandar_mensaje_advertencia():
+    pass
