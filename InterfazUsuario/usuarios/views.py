@@ -33,7 +33,7 @@ def todas_historias_clinicas(request):
         mensaje = f"Error al obtener historias clínicas: {str(e)}"
 
         if mensaje == "Service Temporarily Unavailable for url: http://10.128.0.8:8000/usuarios/historias_usuario":
-             mandar_mensaje_advertencia()
+            mandar_mensaje_advertencia()
              
         return HttpResponse(f"""<script>
                                     alert("{mensaje}");
@@ -65,4 +65,5 @@ def historia_clinica_por_paciente(request):
     return render(request, 'usuarios/HistoriaClinicasPaciente.html')
 
 def mandar_mensaje_advertencia():
+
     pass
