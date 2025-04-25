@@ -72,11 +72,12 @@ def mandar_mensaje_advertencia():
     
     from_number = '+14634030212' 
     to_number = '+573214044360' 
-
+    print("Credenciales listas")
     client = Client(account_sid, auth_token)
-
+    print("Cliente creado")
     message = client.messages.create(
         body='¡Alerta! Falló el manejador de usuarios. Por favor, verifique el sistema.',
         from_=from_number,
         to=to_number
     )
+    print("mensaje enviado")
