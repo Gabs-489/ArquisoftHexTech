@@ -33,7 +33,7 @@ def todas_historias_clinicas(request):
     except Exception as e:
         mensaje = f"Error al obtener historias clínicas: {str(e)}"
         print(mensaje)
-        if mensaje == "Service Temporarily Unavailable for url: http://10.128.0.8:8000/usuarios/historias_usuario":
+        if mensaje == "Error al obtener historias clínicas: 503 Server Error: Service Temporarily Unavailable for url: http://10.128.0.8:8000/usuarios/historias_usuario":
             print("funcion mandar mensaje")
             mandar_mensaje_advertencia()
              
