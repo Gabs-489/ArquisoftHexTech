@@ -68,7 +68,7 @@ def historia_clinica_por_paciente(request):
 
 def mandar_mensaje_advertencia():
     account_sid = 'AC55994d626e2eb71e524c938bf8c27b07'  
-    auth_token = 'bdf828b3ce87803fbf444cd815edc3c2' 
+    auth_token = '78154485797bd9dc9a5ee57f5ab97914' 
 
     
     from_number = '+14634030212' 
