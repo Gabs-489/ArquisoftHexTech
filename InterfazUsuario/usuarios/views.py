@@ -1,10 +1,9 @@
 from django.http import HttpResponse, HttpResponseServerError
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from twilio.rest import Client
 import requests
 
-from InterfazUsuario.settings import MICROSERVICIO_USUARIOS_URL
+from InterfazUsuario.settings import MICROSERVICIO_USUARIOS_URL, MICROSERVICIO_MONITOREO_URL
 
 # Create your views here.
 
@@ -67,18 +66,7 @@ def historia_clinica_por_paciente(request):
     return render(request, 'usuarios/HistoriaClinicasPaciente.html')
 
 def mandar_mensaje_advertencia():
-    account_sid = 'AC55994d626e2eb71e524c938bf8c27b07'  
-    auth_token = '78154485797bd9dc9a5ee57f5ab97914' 
-
-    
-    from_number = '+14634030212' 
-    to_number = '+573214044360' 
-    print("Credenciales listas")
-    client = Client(account_sid, auth_token)
-    print("Cliente creado")
-    message = client.messages.create(
-        body='¡Alerta! Falló el manejador de usuarios. Por favor, verifique el sistema.',
-        from_=from_number,
-        to=to_number
-    )
-    print("mensaje enviado")
+    #Llamar al servidor de monitoreo
+    response = requests.get(f"{MICROSERVICIO_MONITOREO_URL}/errorUsuarios", timeout=20)
+    response.raise_for_status()  # lanza error si status != 200
+    print("Mensaje enviado Correctamente")

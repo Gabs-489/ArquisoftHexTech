@@ -41,6 +41,15 @@ services:
           - /eventos/EEG/analisis/<str:id_examen>
           - /eventos/EEG/resultados
         strip_path: false
+
+  - name: monitor_service
+    host: monitor_upstream
+    protocol: http
+    routes:
+      - name: monitor
+        paths:
+          - /monitoreo/errorUsuarios
+        strip_path: false
     
 upstreams:
   - name: interfaz_upstream
@@ -74,4 +83,9 @@ upstreams:
   - name: eventos_upstream
     targets:
       - target: 10.128.0.2:8080
+        weight: 100
+  
+  - name: monitor_upstream
+    targets:
+      - target: 10.128.0.15:8080
         weight: 100
