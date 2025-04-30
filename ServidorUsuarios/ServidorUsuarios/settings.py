@@ -138,4 +138,4 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'static', 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-HISTORIAS_CLINICAS_API = "http://" + os.environ.get("HC_API", "34.132.1.25") + ":" + os.environ.get("HC_PORT", "8080")
+HISTORIAS_CLINICAS_API = "http://" + os.environ.get("HC_API", "34.69.129.105") + ":" + os.environ.get("HC_PORT", "8080")
