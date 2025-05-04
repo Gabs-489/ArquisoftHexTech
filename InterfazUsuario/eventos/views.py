@@ -14,7 +14,7 @@ import requests
 # Create your views here.
 
 #Cargar todos los examenes
-@login_required
+#@login_required
 def cargar_eventos(request):
     print("iniciando conexion", MICROSERVICIO_EVENTOS_URL)
     try:
@@ -64,7 +64,7 @@ def cargar_eventos(request):
                             </script>
                             """)
 
-@login_required
+#@login_required
 def pag_paciente_examenes(request):
     paciente_data = request.session.get('paciente_data', None)
 
@@ -83,7 +83,7 @@ def pag_paciente_examenes(request):
         return redirect('/interfaz/eventos/EEG/analisis')
     return render(request, 'EEG/pag_paciente_examenes_EEG.html',context)
 
-@login_required
+#@login_required
 def analisis_eeg(request):
     paciente_data = request.session.get('paciente_data', None)
     archivos = get_examenes_eeg(paciente_data['eventos'])
@@ -109,7 +109,7 @@ def analisis_eeg(request):
                             """)
     return render(request, 'EEG/archivos.html', context)
 
-@login_required
+#@login_required
 def resultados_eeg(request):
     paciente_data = request.session.get('paciente_data', None)
     if not paciente_data:
