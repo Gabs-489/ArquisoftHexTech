@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'principal',
     'eventos',
-    'usuarios'
+    'usuarios',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,23 @@ MICROSERVICIO_EVENTOS_URL = PATH_API_GATEWAY + "/eventos"
 MICROSERVICIO_USUARIOS_URL = PATH_API_GATEWAY + "/usuarios"
 MICROSERVICIO_MONITOREO_URL = PATH_API_GATEWAY + "/monitoreo"
 
+#AUTH0
+LOGIN_URL = "/login/auth0" 
+LOGIN_REDIRECT_URL = "/" 
+LOGOUT_REDIRECT_URL = "https://dev-3b1b1yryi8mtzqkz.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.41.184.125:8080" 
+
+SOCIAL_AUTH_TRAILING_SLASH = False # Remove end slash from routes 
+SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-3b1b1yryi8mtzqkz.us.auth0.com'
+SOCIAL_AUTH_AUTH0_KEY = 'zPQb0Uf0BNRufLnDSYPYqCbcbbMcQ2ep' 
+SOCIAL_AUTH_AUTH0_SECRET = 'S3EhmkjHCwwOP6oHOlb18vEpXFNQjJQ4q1Sk0Tjuva1UulQy8En000qkDNGHXldL' 
+SOCIAL_AUTH_AUTH0_SCOPE = [ 
+	'openid', 
+	'profile',
+	'email',
+	'role', 
+] 
+
+AUTHENTICATION_BACKENDS = { 
+	'InterfazUsuario.auth0backend.Auth0', 
+	'django.contrib.auth.backends.ModelBackend', 
+}
