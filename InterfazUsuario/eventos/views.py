@@ -150,24 +150,24 @@ def nuevo_evento(request):
                                     window.location.href = "/interfaz/eventos/nuevo";
                                 </script>""")
 
-        # Crear string de integridad y calcular el hash
         integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{profesional}"
         hash_integridad = hashlib.sha256(integridad_str.encode()).hexdigest()
+        if tipo_evento == "Experimento":
+            tipo_evento = "EEG"
+            descripcion = "EEG"
+            profesional = "EEG"
+        
 
         evento = {
-            "id_paciente": paciente_data['numero_identidad'],
-            "nombre_paciente": paciente_data['nombre'],
-            "apellidos_paciente": paciente_data['apellidos'],
+            "numero_identidad": paciente_data['numero_identidad'],
+            "nuevo_evento": {
             "fecha_evento": fecha_evento,
             "tipo_evento": tipo_evento,
             "descripcion": descripcion,
             "profesional": profesional,
             "hash_integridad": hash_integridad
-        }
-        if evento["tipo_evento"] == "Experimento":
-            evento["tipo_evento"] = "EEG"
-            evento["descripcion"] = "EEG"
-            evento['profesional'] = "EEG"
+        }}
+        
             
         try:
             response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/nuevo", json=evento, timeout=10)
@@ -197,9 +197,35 @@ def nuevo_evento(request):
     return render(request, 'EEG/nuevo_evento.html', context)
 
 
+#@login_required
 def get_evento(request):
-    
-    return render(request, 'EEG/consultar_evento.html')
+    paciente_data = request.session.get('paciente_data', None)
+
+    if not paciente_data:
+        mensaje = "No se encontró información del paciente."
+        return HttpResponse(f"""<script>
+                                alert("{mensaje}");
+                                window.location.href = "/interfaz/eventos";  // Redirigir a eventos
+                            </script>
+                            """)
+
+    eventos = get_eventos_paciente(paciente_data['numero_identidad'])  # Asegúrate que este campo exista
+
+    if isinstance(eventos, dict) and not eventos.get('success', True):
+        mensaje = eventos.get("error", "Error al obtener los eventos médicos.")
+        return HttpResponse(f"""<script>
+                                alert("{mensaje}");
+                                window.location.href = "/interfaz/eventos";
+                            </script>
+                            """)
+
+    context = {
+        'paciente': paciente_data,
+        'eventos': eventos
+    }
+
+    return render(request, 'EEG/consultar_evento.html', context)
+
 
 def get_examenes_paciente(numero_identidad):
     try:
@@ -226,6 +252,26 @@ def get_examenes_paciente(numero_identidad):
         print(f"Error de red o conexión al obtener los exámenes del paciente con la cédula {numero_identidad}: {err}")
         return None
 
+def get_eventos_paciente(numero_identidad):
+    try:
+        
+        response = requests.get(f"{MICROSERVICIO_EVENTOS_URL}/eventosall/{numero_identidad}", timeout=100)
+        response.raise_for_status()
+        data = response.json()
+        print(data)
+        if not data['success']:
+            print("El paciente con ese número de documento de identidad no existe.")
+            return None
+        
+        
+
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("E_medicos", []) 
+        return {"success": False, "error": "Error al obtener eventos desde el microservicio."}
+    
+    except requests.exceptions.RequestException as e:
+        return {"success": False, "error": f"Error de conexión: {str(e)}"}
 
 def get_examenes_eeg(eventos):
     try:
@@ -264,3 +310,15 @@ def solicitar_analisis(id_evento):
     except requests.exceptions.RequestException as e:
         print(f"Error al hacer la solicitud de analisis del examen {id_evento}: {e}")
         return None
+
+
+import hashlib
+
+def generar_hash_evento(evento):
+    cadena = (
+        evento.get("fecha_evento", "") +
+        evento.get("tipo_evento", "") +
+        evento.get("descripcion", "") +
+        evento.get("profesional", "")
+    )
+    return hashlib.sha256(cadena.encode('utf-8')).hexdigest()
