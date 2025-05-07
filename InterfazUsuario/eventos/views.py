@@ -168,7 +168,7 @@ def nuevo_evento(request):
             evento['profesional'] = "EEG"
             
         try:
-            response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/nuevo", json=evento, timeout=10)
+            response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/crear/nuevo", json=evento, timeout=10)
             resultado = response.json()
 
             if resultado.get('success'):
