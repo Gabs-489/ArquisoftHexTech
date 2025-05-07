@@ -102,7 +102,8 @@ def resultados_eeg(request):
 def nuevo_evento(request):
     print("Conexion para crear evento")
     hash_integridad = request.data.get("hash_integridad")
-
+    print(hash_integridad)
+    
     if not hash_integridad:
         return Response({"error": "Falta el hash de integridad"}, status=400)
 
