@@ -147,7 +147,7 @@ def nuevo_evento(request):
             mensaje = "Todos los campos son obligatorios."
             return HttpResponse(f"""<script>
                                     alert("{mensaje}");
-                                    window.location.href = "/interfaz/eventos/nuevo";
+                                    window.location.href = "/interfaz/eventos";
                                 </script>""")
 
         integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{profesional}"
@@ -177,19 +177,19 @@ def nuevo_evento(request):
                 mensaje = "Evento médico registrado exitosamente."
                 return HttpResponse(f"""<script>
                                         alert("{mensaje}");
-                                        window.location.href = "/interfaz/eventos/EEG";
+                                        window.location.href = "/interfaz/eventos";
                                     </script>""")
             else:
                 mensaje = "Error al registrar el evento."
                 return HttpResponse(f"""<script>
                                         alert("{mensaje}");
-                                        window.location.href = "/interfaz/eventos/nuevo";
+                                        window.location.href = "/interfaz/eventos";
                                     </script>""")
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
             return HttpResponse(f"""<script>
                                     alert("{mensaje}");
-                                    window.location.href = "/interfaz/eventos/nuevo";
+                                    window.location.href = "/interfaz/eventos";
                                 </script>""")
     context = {
         "paciente": paciente_data
