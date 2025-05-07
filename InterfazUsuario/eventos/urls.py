@@ -4,7 +4,7 @@ from .views import *
 
 urlpatterns = [
     path('interfaz/eventos', cargar_eventos),
-    path('interfaz/eventos/nuevo', nuevo_evento),
+    path('interfaz/pacientes/nuevo/<str:numero_identidad_paciente>', nuevo_evento),
     path('interfaz/eventos/consultar', get_evento),
     path('interfaz/eventos/EEG',pag_paciente_examenes),
     path('interfaz/eventos/EEG/analisis', analisis_eeg,name='analisis_eeg'),
