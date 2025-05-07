@@ -36,6 +36,7 @@ services:
       - name: eventos
         paths:
           - /eventos
+          - /eventos/nuevo
           - /eventos/<str:numero_identidad_paciente>
           - /eventos/EEG/analisis
           - /eventos/EEG/analisis/<str:id_examen>

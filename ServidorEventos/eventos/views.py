@@ -93,6 +93,16 @@ def resultados_eeg(request):
         return Response({"success": False, "error": "JSON inválido"}, status=400)   
 
 
+#Generar un nuevo evento
+@api_view(['POST'])
+def nuevo_evento(request):
+    hash_integridad = request.data.get("hash_integridad")
+
+    if not hash_integridad:
+        return Response({"error": "Falta el hash de integridad"}, status=400)
+
+    # Procesar evento...
+    return Response({"mensaje": "Evento recibido correctamente", "hash": hash_integridad})
 
 def get_examenes_paciente(numero_identidad):
     try:
