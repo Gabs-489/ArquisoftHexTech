@@ -141,9 +141,8 @@ def nuevo_evento(request):
         fecha_evento = request.POST.get('fecha_evento')
         tipo_evento = request.POST.get('tipo_evento')
         descripcion = request.POST.get('descripcion')
-        profesional = request.POST.get('profesional')
 
-        if not all([fecha_evento, tipo_evento, descripcion, profesional]):
+        if not all([fecha_evento, tipo_evento, descripcion]):
             mensaje = "Todos los campos son obligatorios."
             return HttpResponse(f"""<script>
                                     alert("{mensaje}");
@@ -151,7 +150,7 @@ def nuevo_evento(request):
                                 </script>""")
 
         # Crear string de integridad y calcular el hash
-        integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{profesional}"
+        integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}"
         hash_integridad = hashlib.sha256(integridad_str.encode()).hexdigest()
 
         evento = {
@@ -161,7 +160,6 @@ def nuevo_evento(request):
             "fecha_evento": fecha_evento,
             "tipo_evento": tipo_evento,
             "descripcion": descripcion,
-            "profesional": profesional,
             "hash_integridad": hash_integridad
         }
         if evento["tipo_evento"] == "Experimento":
