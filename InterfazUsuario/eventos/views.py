@@ -98,7 +98,7 @@ def analisis_eeg(request):
             # Hacer que el servidor envie el mensaje con el id del archivo
             realizado = solicitar_analisis(file_id)
 
-            if realizado['success']: 
+            if realizado!= None and realizado['success']: 
                 mensaje = "Se envio con exito la solicitud de analisis."
             else:
                 mensaje = "No se pudo enviar la solicitud de analisis."

@@ -64,7 +64,7 @@ def solicitar_analisis(request,id_examen):
         mensaje = "Se envio con exito la solicitud de analisis."
         return Response({"success": True, "mensaje":mensaje},status=200)
     else:
-        return Response({"success": False, "mensaje":mensaje},status=500)
+        return Response({"success": False},status=500)
 
 
 @api_view(['GET'])
