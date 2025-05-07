@@ -1,0 +1,57 @@
+{% extends 'EEG/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="page-header-title">
+        <h4 class="page-title">Registrar Nuevo Evento Médico</h4>
+    </div>
+
+    <div class="page-content-wrapper">
+        <div class="container">
+            <h5>Paciente: {{ paciente.nombre }} {{ paciente.apellidos }}</h5>
+
+            <form method="POST" action="">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="fecha_evento">Fecha del Evento:</label>
+                    <input type="date" id="fecha_evento" name="fecha_evento" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo_evento">Tipo de Evento:</label>
+                    <select id="tipo_evento" name="tipo_evento" class="form-control" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="consulta">Consulta médica</option>
+                        <option value="examen">Examen médico</option>
+                        <option value="cirugia">Cirugía</option>
+                        <option value="prescripcion">Prescripción de medicamentos</option>
+                        <option value="prescripcion">Experimento</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" class="form-control" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="profesional">Profesional de Salud:</label>
+                    <input type="text" id="profesional" name="profesional" class="form-control" required>
+                </div>
+
+                <div class="form-group" style="margin-top:20px;">
+                    <button type="submit" class="btn btn-success">Guardar Evento</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/interfaz/eventos'">Back</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

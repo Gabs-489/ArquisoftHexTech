@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render
-
+import hashlib
 # Create your views here.
 
 from django.http import HttpResponse
@@ -126,6 +126,80 @@ def resultados_eeg(request):
     }
     return render(request, 'EEG/resultados.html', context)
 
+#@login_required
+def nuevo_evento(request):
+    paciente_data = request.session.get('paciente_data', None)
+
+    if not paciente_data:
+        mensaje = "No se encontró información del paciente."
+        return HttpResponse(f"""<script>
+                                alert("{mensaje}");
+                                window.location.href = "/interfaz/eventos";
+                            </script>""")
+
+    if request.method == 'POST':
+        fecha_evento = request.POST.get('fecha_evento')
+        tipo_evento = request.POST.get('tipo_evento')
+        descripcion = request.POST.get('descripcion')
+        profesional = request.POST.get('profesional')
+
+        if not all([fecha_evento, tipo_evento, descripcion, profesional]):
+            mensaje = "Todos los campos son obligatorios."
+            return HttpResponse(f"""<script>
+                                    alert("{mensaje}");
+                                    window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
+
+        # Crear string de integridad y calcular el hash
+        integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{profesional}"
+        hash_integridad = hashlib.sha256(integridad_str.encode()).hexdigest()
+
+        evento = {
+            "id_paciente": paciente_data['numero_identidad'],
+            "nombre_paciente": paciente_data['nombre'],
+            "apellidos_paciente": paciente_data['apellidos'],
+            "fecha_evento": fecha_evento,
+            "tipo_evento": tipo_evento,
+            "descripcion": descripcion,
+            "profesional": profesional,
+            "hash_integridad": hash_integridad
+        }
+        if evento["tipo_evento"] == "Experimento":
+            evento["tipo_evento"] = "EEG"
+            evento["descripcion"] = "EEG"
+            evento['profesional'] = "EEG"
+            
+        try:
+            response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/nuevo", json=evento, timeout=10)
+            resultado = response.json()
+
+            if resultado.get('success'):
+                mensaje = "Evento médico registrado exitosamente."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/EEG";
+                                    </script>""")
+            else:
+                mensaje = "Error al registrar el evento."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                    </script>""")
+        except requests.exceptions.RequestException as e:
+            mensaje = f"Error de conexión con el microservicio: {str(e)}"
+            return HttpResponse(f"""<script>
+                                    alert("{mensaje}");
+                                    window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
+    context = {
+        "paciente": paciente_data
+    }
+    return render(request, 'EEG/nuevo_evento.html', context)
+
+
+def get_evento(request):
+    
+    return render(request, 'EEG/consultar_evento.html')
 
 def get_examenes_paciente(numero_identidad):
     try:
