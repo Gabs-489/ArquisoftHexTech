@@ -98,7 +98,7 @@ def resultados_eeg(request):
 
 
 #Generar un nuevo evento
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def nuevo_evento(request):
     print("Conexion para crear evento")
     hash_integridad = request.data.get("hash_integridad")
