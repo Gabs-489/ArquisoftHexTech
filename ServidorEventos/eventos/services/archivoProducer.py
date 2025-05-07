@@ -10,20 +10,27 @@ exchange = 'monitoring_prediction'
 topic = 'eeg.request'
 
 def enviar_mensaje(payload,nombre):
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host=rabbit_host, credentials=pika.PlainCredentials(rabbit_user, rabbit_password)))
-    channel = connection.channel()
+    try:
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host=rabbit_host, credentials=pika.PlainCredentials(rabbit_user, rabbit_password)))
+        channel = connection.channel()
 
-    channel.exchange_declare(exchange=exchange, exchange_type='topic')
+        channel.exchange_declare(exchange=exchange, exchange_type='topic')
 
-    channel.queue_declare(queue="monitoring_prediction")
+        channel.queue_declare(queue="monitoring_prediction")
 
-    channel.queue_bind(exchange=exchange, queue="monitoring_prediction", routing_key=topic)
+        channel.queue_bind(exchange=exchange, queue="monitoring_prediction", routing_key=topic)
 
-    print('> Enviando el archivo')
+        print('> Enviando el archivo')
 
-    channel.basic_publish(exchange=exchange,
-                        routing_key=topic, body=payload)
-    print("Se envio el archivo:", nombre)
+        channel.basic_publish(exchange=exchange,
+                              routing_key=topic, body=payload)
+        print("Se envio el archivo:", nombre)
 
-    connection.close()
+        connection.close()
+
+        return True
+    except Exception as e:
+        print(f"Error al enviar el archivo: {e}")
+        return False
+    

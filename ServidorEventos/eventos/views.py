@@ -58,9 +58,13 @@ def solicitar_analisis(request,id_examen):
         return Response({"success": False, "error": "No se encontro el examen"}, status=404)
     
     payload ="{'id': '%s', 'path': '%s'}" % (examen.id, examen.path)
-    enviar_mensaje(payload,examen.id)
-    mensaje = "Se envio con exito la solicitud de analisis."
-    return Response({"success": True, "mensaje":mensaje},status=200)
+    enviado = enviar_mensaje(payload,examen.id)
+
+    if enviado: 
+        mensaje = "Se envio con exito la solicitud de analisis."
+        return Response({"success": True, "mensaje":mensaje},status=200)
+    else:
+        return Response({"success": False, "mensaje":mensaje},status=500)
 
 
 @api_view(['GET'])
