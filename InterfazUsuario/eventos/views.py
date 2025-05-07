@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
 from InterfazUsuario.settings import MICROSERVICIO_EVENTOS_URL
-from InterfazUsuario.settings import MICROSERVICIO_USUARIOS_URL
+
 import requests
 
 # Create your views here.
@@ -170,7 +170,7 @@ def nuevo_evento(request):
         
             
         try:
-            response = requests.post(f"{MICROSERVICIO_USUARIOS_URL}/pacientes/nuevo/{paciente_data['numero_identidad']}", json=evento, timeout=10)
+            response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/nuevo", json=evento, timeout=10)
             resultado = response.json()
 
             if resultado.get('success'):
