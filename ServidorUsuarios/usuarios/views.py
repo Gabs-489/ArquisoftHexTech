@@ -1,7 +1,6 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
-import hashlib
 import requests
 
 from ServidorUsuarios.settings import HISTORIAS_CLINICAS_API
@@ -32,42 +31,6 @@ def crear_paciente(request):
         else:
             return HttpResponse("unsuccessfully created measurement. Variable or place does not exist")
 
-@api_view(['POST'])
-def agregar_evento_a_paciente(request):
-    data = request.data
-    numero_identidad = data.get('numero_identidad')
-    nuevo_evento = data.get('nuevo_evento')
-
-    if not numero_identidad or not nuevo_evento:
-        return Response(
-            {"error": "Faltan datos: 'numero_identidad' o 'nuevo_evento'."},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-    paciente = get_paciente(numero_identidad)
-    if not paciente:
-        return Response({"error": "Paciente no encontrado."}, status=status.HTTP_404_NOT_FOUND)
-
-    hash_cliente = nuevo_evento.get("hash_integridad")
-    hash_servidor = generar_hash_evento(nuevo_evento)
-
-    if hash_cliente != hash_servidor:
-        return Response(
-            {"error": "El hash de integridad no es válido."},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-    if not paciente.eventos:
-        paciente.eventos = []
-
-    paciente.eventos.append(nuevo_evento)
-    paciente.save()
-
-    return Response(
-        {"success": True, "mensaje": "Evento agregado correctamente al paciente."},
-        status=status.HTTP_200_OK
-    )
-
 
 
 @api_view(['GET'])
@@ -79,8 +42,6 @@ def obtener_examenes_paciente(request, numero_identidad_paciente):
     serializer = Paciente_serializer(paciente)
     print("Retornando paciente con cedula",numero_identidad_paciente)
     return Response(serializer.data)
-
-
 
 @api_view(['GET'])
 def obtener_historias_de_pacientes(request):
@@ -113,14 +74,3 @@ def obtener_historia_de_un_paciente(request, numero_identidad_paciente):
 
     except requests.exceptions.RequestException as e:
         return Response({"error": str(e)}, status=500)
-    
-
-def generar_hash_evento(evento):
-    cadena = (
-        evento.get("fecha_evento", "") +
-        evento.get("tipo_evento", "") +
-        evento.get("descripcion", "") +
-        evento.get("profesional", "")
-    )
-    return hashlib.sha256(cadena.encode('utf-8')).hexdigest()
-

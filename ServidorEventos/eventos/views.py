@@ -30,30 +30,8 @@ def cargar_examenes(request):
 @api_view(['GET'])
 def examenes_paciente(request, numero_identidad_paciente):
     if numero_identidad_paciente:
-        
+        # Crear el payload con el nombre y la ruta del archivo
         datos = get_examenes_paciente(numero_identidad_paciente)
-        if datos == None:
-            return Response({
-                "success": False,
-                "message": "No se encontró un paciente con ese número de identidad."
-            }, status=404)
-        
-        return Response({
-            "success": True,
-            "data": datos
-        }, status=200)
-    
-    else:
-        return Response({
-            "success": False,
-            "message": "Número de identidad no proporcionado."
-        }, status=400)
-        
-@api_view(['GET'])
-def eventos_paciente(request, numero_identidad_paciente):
-    if numero_identidad_paciente:
-        
-        datos = get_eventos_paciente(numero_identidad_paciente)
         if datos == None:
             return Response({
                 "success": False,
@@ -117,21 +95,6 @@ def resultados_eeg(request):
 
 
 def get_examenes_paciente(numero_identidad):
-    try:
-        print("Inicia busqueda Paciente")
-        response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/pacientes/{numero_identidad}", timeout=100)
-        response.raise_for_status()
-        data = response.json()
-        if not data:
-            print("El paciente con ese numero de documento de identidad, no existe.")
-            return None
-        return data
-    except requests.exceptions.RequestException as e:
-        print(f"Error al obtener los exámenes del paciente con la cedula {numero_identidad}: {e}")
-        return None
-    
-    
-def get_eventos_paciente(numero_identidad):
     try:
         print("Inicia busqueda Paciente")
         response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/pacientes/{numero_identidad}", timeout=100)
