@@ -3,7 +3,6 @@ from django.urls import path
 
 urlpatterns = [
     path('eventos/', cargar_examenes),
-    path('eventos/nuevo', cargar_examenes),
     path('eventos/<str:numero_identidad_paciente>', examenes_paciente, name='examenes_paciente'),
     path('eventos/eventosall/<str:numero_identidad_paciente>', examenes_paciente, name='examenes_paciente'),
     path('eventos/EEG/analisis', analisis_eeg,name='analisis_eeg'),

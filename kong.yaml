@@ -25,7 +25,6 @@ services:
         paths:
           - /usuarios/pacientes
           - /usuarios/pacientes/<str:numero_identidad_paciente>
-          - /usuarios/pacientes/nuevo/<str:numero_identidad_paciente>
           - /usuarios/historias_usuario
           - /usuarios/historias_usuario/<str:numero_identidad_paciente>
         strip_path: false
@@ -37,10 +36,8 @@ services:
       - name: eventos
         paths:
           - /eventos
-          - /eventos/nuevo
           - /eventos/<str:numero_identidad_paciente>
           - /eventos/EEG/analisis
-          - /eventos/eventosall/<str:numero_identidad_paciente>
           - /eventos/EEG/analisis/<str:id_examen>
           - /eventos/EEG/resultados
         strip_path: false
