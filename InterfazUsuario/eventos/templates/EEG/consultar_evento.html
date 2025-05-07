@@ -1,0 +1,64 @@
+{% extends 'EEG/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+            <h4 class="page-title">Consulta de Eventos Médicos</h4>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="page-content-wrapper">
+        <div class="container">
+            <h5>Paciente: {{ paciente.nombre }} {{ paciente.apellidos }}</h5>
+
+            <div class="panel panel-default mt-4">
+                <div class="panel-body">
+                    {% if eventos|length > 0 %}
+                    <table class="table table-hover">
+                        <thead>
+                        <tr style="color:#0E2EB0">
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Profesional</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for evento in eventos %}
+                        <tr>
+                            <td>{{ evento.fecha }}</td>
+                            <td>{{ evento.tipo }}</td>
+                            <td>{{ evento.descripcion }}</td>
+                            <td>{{ evento.profesional }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div style="text-align: center; font-weight: bold; color: #0E2EB0; margin-top: 20px;">
+                        No hay eventos médicos registrados.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top: 20px;">
+                <button type="button" class="btn btn-primary waves-effect waves-light"
+                        onclick="window.location.href='/interfaz/eventos/EEG'">
+                    Back
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
