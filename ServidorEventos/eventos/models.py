@@ -4,7 +4,7 @@ from django.db import models
 class Evento(models.Model):
     id = models.AutoField(primary_key=True)
     fecha = models.DateTimeField(auto_now_add=True)
-    comentarios =  models.CharField(max_length=300)  
+    comentarios =  models.TextField(blank=True, null=True)
     class Meta:
         abstract = True  
 
