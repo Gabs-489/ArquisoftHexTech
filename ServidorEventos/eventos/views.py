@@ -27,6 +27,7 @@ def cargar_examenes(request):
         print(f"Error al cargar los exámenes: {e}")  
     return Response({"success": success})
 
+
 @api_view(['GET'])
 def examenes_paciente(request, numero_identidad_paciente):
     if numero_identidad_paciente:
@@ -83,6 +84,7 @@ def solicitar_analisis(request,id_examen):
     enviar_mensaje(payload,examen.id)
     mensaje = "Se envio con exito la solicitud de analisis."
     return Response({"success": True, "mensaje":mensaje},status=200)
+
 
 
 @api_view(['GET'])
