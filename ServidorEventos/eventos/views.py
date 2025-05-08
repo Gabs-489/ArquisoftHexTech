@@ -143,6 +143,7 @@ def nuevo_evento(request):
 
         #Comparar HASH
         hash_calculado = hashlib.sha256(integridad_str.encode()).hexdigest()
+        print("hash calculado")
 
         if hash_calculado!= hash_integridad:
             return Response({
@@ -150,8 +151,9 @@ def nuevo_evento(request):
                 "hash_recibido": hash_integridad,
                 "hash_esperado": hash_calculado
             }, status=400)
-
+        
         else:
+            print("hash verificado")
             #Generar el evento
             if tipo_evento == "consulta":
                 consulta = ConsultaMedica(
@@ -192,6 +194,7 @@ def nuevo_evento(request):
         # Procesar evento...
         return Response({"mensaje": "Evento recibido y creado correctamente", "hash": hash_integridad},status=200)
     except Exception as e:
+        print(e)
         return Response({
                 "mensaje": "No se pudo crear el evento"
             }, status=500)
