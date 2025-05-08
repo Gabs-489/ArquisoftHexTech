@@ -240,11 +240,31 @@ def nuevo_evento(request):
                 mensaje = resultado.get("mensaje", "Error al registrar el evento.")
                 print("Error", mensaje)
                 return HttpResponse(f"""<script>
-                                alert("{mensaje}");
-                                setTimeout(function() {{
-                            window.location.href = "/interfaz/eventos/nuevo";
-                        }}, 500); 
-                                </script>""")
+                        var mensaje = "{mensaje}";
+                        var modalHtml = `
+                        <div class="modal" tabindex="-1" role="dialog" id="mensajeModal">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Mensaje</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>` + mensaje + `</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="/interfaz/eventos/nuevo" class="btn btn-primary">Aceptar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                        
+                        document.body.insertAdjacentHTML('beforeend', modalHtml);
+                        $('#mensajeModal').modal('show');
+                    </script>""")
+
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
             return HttpResponse(f"""<script>
