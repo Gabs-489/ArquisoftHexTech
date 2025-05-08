@@ -148,10 +148,6 @@ def nuevo_evento(request):
         if tipo_evento == "consulta":
             causa = request.POST.get('causa')
             hora_inicio = request.POST.get('hora_inicio_consulta')
-            print("fecha:", fecha_evento)
-            print("tipo:", tipo_evento)
-            print("causa:", causa)
-            print("hora:", hora_inicio)
 
             if not all([fecha_evento, tipo_evento, causa,hora_inicio]):
                 mensaje = "Todos los campos son obligatorios."
@@ -159,9 +155,11 @@ def nuevo_evento(request):
                                         alert("{mensaje}");
                                         window.location.href = "/interfaz/eventos/nuevo";
                                 </script>""")
-            integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{causa}|{hora_inicio}"
+            hora_inicio_num = int(hora_inicio.replace(":", ""))
+            integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{causa}|{hora_inicio_num}"
+            
 
-            evento = {"causa":causa, "hora_inicio":hora_inicio}
+            evento = {"causa":causa, "hora_inicio":hora_inicio_num}
 
         elif tipo_evento == "cirugia":
             duracion = request.POST.get('duracion')
@@ -172,9 +170,10 @@ def nuevo_evento(request):
                                         alert("{mensaje}");
                                         window.location.href = "/interfaz/eventos/nuevo";
                                 </script>""")
-            integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{duracion}|{hora_inicio}"
+            hora_inicio_num = int(hora_inicio.replace(":", ""))
+            integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{duracion}|{hora_inicio_num}"
 
-            evento = {"duracion":duracion, "hora_inicio":hora_inicio}
+            evento = {"duracion":duracion, "hora_inicio":hora_inicio_num}
 
         elif tipo_evento == "prescripcion":
             medicamento = request.POST.get('medicamento')
