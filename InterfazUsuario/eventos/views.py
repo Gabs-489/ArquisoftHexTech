@@ -138,51 +138,102 @@ def nuevo_evento(request):
                             </script>""")
 
     if request.method == 'POST':
+
+        integridad_str = ""
+
         fecha_evento = request.POST.get('fecha_evento')
         tipo_evento = request.POST.get('tipo_evento')
         descripcion = request.POST.get('descripcion')
 
-        if not all([fecha_evento, tipo_evento, descripcion]):
-            mensaje = "Todos los campos son obligatorios."
+        if tipo_evento == "consulta":
+            causa = request.POST.get('causa')
+            hora_inicio = request.POST.get('hora_inicio')
+            if not all([fecha_evento, tipo_evento, causa,hora_inicio]):
+                mensaje = "Todos los campos son obligatorios."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
+            integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{causa}|{hora_inicio}"
+
+            evento = {"causa":causa, "hora_inicio":hora_inicio}
+
+        elif tipo_evento == "cirugia":
+            duracion = request.POST.get('duracion')
+            hora_inicio = request.POST.get('hora_inicio')
+            if not all([fecha_evento, tipo_evento, duracion,hora_inicio]):
+                mensaje = "Todos los campos son obligatorios."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
+            integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{duracion}|{hora_inicio}"
+
+            evento = {"duracion":duracion, "hora_inicio":hora_inicio}
+
+        elif tipo_evento == "prescripcion":
+            medicamento = request.POST.get('medicamento')
+            if not all([fecha_evento, tipo_evento, medicamento]):
+                mensaje = "Todos los campos son obligatorios."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
+            integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{medicamento}"
+
+            evento = {"medicamento":medicamento}
+
+        elif tipo_evento == "EEG":
+            nombre = request.POST.get('nombre')
+            peso_archivo = request.POST.get('peso_archivo')
+            path = request.POST.get('path')
+            if not all([fecha_evento, tipo_evento, nombre, peso_archivo, ]):
+                mensaje = "Todos los campos son obligatorios."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
+            integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{nombre}|{peso_archivo}|{path}"
+
+            evento = {"nombre":nombre, "peso_archivo":peso_archivo, "path":path}
+
+        else:
+            mensaje = "Debe elegir un tipo de evento."
             return HttpResponse(f"""<script>
                                     alert("{mensaje}");
                                     window.location.href = "/interfaz/eventos/nuevo";
                                 </script>""")
 
+        #Para la prueba se pregunta si cambiar el mensaje 
+        cambiar = input("Ingrese 1 si desea cambiar el mensaje: ")
+        if cambiar==1:
+            mensaje="Mensaje modificado"
+
         # Crear string de integridad y calcular el hash
-        integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}"
         hash_integridad = hashlib.sha256(integridad_str.encode()).hexdigest()
 
-        evento = {
-            "id_paciente": paciente_data['numero_identidad'],
-            "nombre_paciente": paciente_data['nombre'],
-            "apellidos_paciente": paciente_data['apellidos'],
-            "fecha_evento": fecha_evento,
-            "tipo_evento": tipo_evento,
-            "descripcion": descripcion,
-            "hash_integridad": hash_integridad
-        }
-        if evento["tipo_evento"] == "Experimento":
-            evento["tipo_evento"] = "EEG"
-            evento["descripcion"] = "EEG"
-            evento['profesional'] = "EEG"
+        evento["id_paciente"] = paciente_data['numero_identidad']
+        evento["fecha_evento"] = fecha_evento
+        evento["tipo_evento"] = tipo_evento
+        evento["descripcion"] = descripcion
+        evento["hash_integridad"] = hash_integridad
             
         try:
             response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/crear/nuevo", json=evento, timeout=10)
             resultado = response.json()
 
-            if resultado.get('success'):
-                mensaje = "Evento médico registrado exitosamente."
+            if response.status_code == 200 :
+                mensaje = resultado.get("mensaje", "Evento registrado exitosamente.")
                 return HttpResponse(f"""<script>
-                                        alert("{mensaje}");
-                                        window.location.href = "/interfaz/eventos/EEG";
-                                    </script>""")
+                                alert("{mensaje}");
+                                window.location.href = "/interfaz/eventos/EEG";
+                                </script>""")
             else:
-                mensaje = "Error al registrar el evento."
+                mensaje = resultado.get("mensaje", "Error al registrar el evento.")
                 return HttpResponse(f"""<script>
-                                        alert("{mensaje}");
-                                        window.location.href = "/interfaz/eventos/nuevo";
-                                    </script>""")
+                                alert("{mensaje}");
+                                window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
             return HttpResponse(f"""<script>

@@ -22,7 +22,7 @@
                     <label for="fecha_evento">Fecha del Evento:</label>
                     <input type="date" id="fecha_evento" name="fecha_evento" class="form-control" required>
                 </div>
-
+            
                 <div class="form-group">
                     <label for="tipo_evento">Tipo de Evento:</label>
                     <select id="tipo_evento" name="tipo_evento" class="form-control" required>
@@ -31,21 +31,90 @@
                         <option value="cirugia">Cirugía</option>
                         <option value="prescripcion">Prescripción de medicamentos</option>
                         <option value="EEG">EEG</option>
-                        <option value="otro">Otro</option>
                     </select>
                 </div>
-
+            
+                <!-- Común -->
                 <div class="form-group">
                     <label for="descripcion">Descripción:</label>
                     <textarea id="descripcion" name="descripcion" class="form-control" rows="4" required></textarea>
                 </div>
-
-
+            
+                <!-- Consulta médica -->
+                <div id="campos-consulta" class="tipo-campos" style="display:none;">
+                    <div class="form-group">
+                        <label for="causa">Causa:</label>
+                        <input type="text" name="causa" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="hora_inicio">Hora de Inicio:</label>
+                        <input type="number" name="hora_inicio" class="form-control">
+                    </div>
+                </div>
+            
+                <!-- Cirugía -->
+                <div id="campos-cirugia" class="tipo-campos" style="display:none;">
+                    <div class="form-group">
+                        <label for="duracion">Duración (minutos):</label>
+                        <input type="number" name="duracion" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="hora_inicio">Hora de Inicio:</label>
+                        <input type="number" name="hora_inicio" class="form-control">
+                    </div>
+                </div>
+            
+                <!-- Prescripción -->
+                <div id="campos-prescripcion" class="tipo-campos" style="display:none;">
+                    <div class="form-group">
+                        <label for="medicamento">Medicamento:</label>
+                        <input type="text" name="medicamento" class="form-control">
+                    </div>
+                </div>
+            
+                <!-- EEG -->
+                <div id="campos-eeg" class="tipo-campos" style="display:none;">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" name="nombre" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="peso_archivo">Peso del archivo:</label>
+                        <input type="text" name="peso_archivo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="path">Ruta del archivo:</label>
+                        <input type="text" name="path" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="resultado_analisis">Resultado del análisis:</label>
+                        <input type="text" name="resultado_analisis" class="form-control">
+                    </div>
+                </div>
+            
                 <div class="form-group" style="margin-top:20px;">
                     <button type="submit" class="btn btn-success">Guardar Evento</button>
                     <button type="button" class="btn btn-secondary" onclick="window.location.href='/interfaz/eventos'">Back</button>
                 </div>
-            </form>    
+            </form>
+            
+            <script>
+                document.getElementById("tipo_evento").addEventListener("change", function () {
+                    const tipo = this.value;
+                    document.querySelectorAll(".tipo-campos").forEach(div => div.style.display = "none");
+            
+                    if (tipo === "consulta") {
+                        document.getElementById("campos-consulta").style.display = "block";
+                    } else if (tipo === "cirugia") {
+                        document.getElementById("campos-cirugia").style.display = "block";
+                    } else if (tipo === "prescripcion") {
+                        document.getElementById("campos-prescripcion").style.display = "block";
+                    } else if (tipo === "EEG") {
+                        document.getElementById("campos-eeg").style.display = "block";
+                    }
+                });
+            </script>
+              
         </div>
     </div>
 </div>

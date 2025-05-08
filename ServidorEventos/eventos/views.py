@@ -1,6 +1,9 @@
+import hashlib
 import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+
+from .models import ConsultaMedica, Cirugia, EEG, PrescripcionMedicamento
 
 from .serializers import Examen_serializer
 from ServidorEventos.settings import MICROSERVICIO_USUARIOS_URL
@@ -101,14 +104,92 @@ def resultados_eeg(request):
 @api_view(['POST'])
 def nuevo_evento(request):
     print("Conexion para crear evento")
+    #Calcular hash
     hash_integridad = request.data.get("hash_integridad")
-    print(hash_integridad)
+    
 
     if not hash_integridad:
         return Response({"error": "Falta el hash de integridad"}, status=400)
+    
+    integridad_str = ""
+
+    #Generar Mensaje para cada tipo de evento 
+    fecha_evento = request.data.get("fecha_evento")
+    tipo_evento = request.data.get("tipo_evento")
+    descripcion = request.data.get("descripcion")
+
+    if tipo_evento == "consulta":
+        causa = request.data.get("causa")
+        hora_inicio = request.data.get("hora_inicio") 
+        integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{causa}|{hora_inicio}"
+
+    elif tipo_evento == "cirugia":
+        duracion =  request.data.get("duracion")
+        hora_inicio = request.data.get("hora_inicio") 
+        integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{duracion}|{hora_inicio}"
+
+    elif tipo_evento == "prescripcion":
+        medicamento = request.data.get("medicamento")
+    
+        integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{medicamento}"
+
+    elif tipo_evento == "EEG":
+        nombre = request.data.get("nombre")
+        peso_archivo = request.data.get("peso_archivo")
+        path = request.data.get("path")
+        integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{nombre}|{peso_archivo}|{path}"
+
+
+    #Comparar HASH
+    hash_calculado = hashlib.sha256(integridad_str.encode()).hexdigest()
+
+    if hash_calculado!= hash_integridad:
+        return Response({
+            "mensaje": "El hash de integridad no coincide.",
+            "hash_recibido": hash_integridad,
+            "hash_esperado": hash_calculado
+        }, status=400)
+
+    else:
+        #Generar el evento
+        if tipo_evento == "consulta":
+            consulta = ConsultaMedica(
+            fecha_evento=fecha_evento,
+            causa=causa,
+            hora_inicio=hora_inicio,
+            comentarios=descripcion
+            )
+            consulta.save()
+
+        elif tipo_evento == "cirugia":
+            cirugia = Cirugia(
+                fecha_evento=fecha_evento,
+                comentarios=descripcion,
+                duracion=duracion,
+                hora_inicio=hora_inicio
+            )
+            cirugia.save()
+
+        elif tipo_evento == "prescripcion":
+            prescripcion = PrescripcionMedicamento(
+                fecha_evento=fecha_evento,
+                comentarios=descripcion,
+                medicamento=medicamento
+            )
+            prescripcion.save()
+
+        elif tipo_evento == "EEG":
+            eeg = EEG(
+                fecha_evento=fecha_evento,
+                comentarios=descripcion,
+                nombre=nombre,
+                peso_archivo=peso_archivo,
+                path=path
+            )
+            eeg.save()
 
     # Procesar evento...
-    return Response({"mensaje": "Evento recibido correctamente", "hash": hash_integridad})
+    return Response({"mensaje": "Evento recibido y creado correctamente", "hash": hash_integridad},status=200)
 
 
 
