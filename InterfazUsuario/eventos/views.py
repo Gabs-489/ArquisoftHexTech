@@ -222,7 +222,11 @@ def nuevo_evento(request):
         evento["tipo_evento"] = tipo_evento
         evento["descripcion"] = descripcion
         evento["hash_integridad"] = hash_integridad
-            
+        
+        return HttpResponse(f"""<script>
+                                    alert("Prueba");
+                                    window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
         try:
             response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/crear/nuevo", json=evento, timeout=10)
             resultado = response.json()
