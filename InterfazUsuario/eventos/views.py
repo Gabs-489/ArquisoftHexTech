@@ -4,6 +4,7 @@ import hashlib
 # Create your views here.
 
 from django.http import HttpResponse
+from django.utils.html import escape
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
@@ -249,6 +250,7 @@ def nuevo_evento(request):
             else:
                 mensaje = resultado.get("mensaje", "Error al registrar el evento.")
                 print("Error",mensaje)
+                mensaje_escapado = escape(mensaje)
                 return HttpResponse(f"""
                     <html>
                         <head>
@@ -259,7 +261,7 @@ def nuevo_evento(request):
                                 alert("{mensaje}");  // Muestra la ventana emergente
                                 setTimeout(function() {{
                                     window.location.href = "/interfaz/eventos/nuevo";
-                                }}, 1000);
+                                }}, 10000);
                             </script>
                         </body>
                     </html>
