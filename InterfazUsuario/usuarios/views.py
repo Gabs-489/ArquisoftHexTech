@@ -8,11 +8,11 @@ from InterfazUsuario.settings import MICROSERVICIO_USUARIOS_URL, MICROSERVICIO_M
 
 # Create your views here.
 
-#@login_required
+@login_required
 def pag_principal(request):
     return render(request, 'usuarios/pag_principal.html')
 
-#@login_required
+@login_required
 def todas_historias_clinicas(request):
     try:
         response = requests.get(f"{MICROSERVICIO_USUARIOS_URL}/historias_usuario", timeout=20)
@@ -45,7 +45,7 @@ def todas_historias_clinicas(request):
                                 </script>
                                 """)
 
-#@login_required
+@login_required
 def historia_clinica_por_paciente(request):
     if request.method == 'POST':
                 numero_identidad_paciente = request.POST.get('numero_identidad')
