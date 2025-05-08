@@ -229,9 +229,12 @@ def nuevo_evento(request):
             if response.status_code == 200 :
                 mensaje = resultado.get("mensaje", "Evento registrado exitosamente.")
                 return HttpResponse(f"""<script>
-                                alert("{mensaje}");
-                                window.location.href = "/interfaz/eventos/EEG";
-                                </script>""")
+                        alert("{mensaje}");
+                        setTimeout(function() {{
+                            window.location.href = "/interfaz/eventos/EEG";
+                        }}, 500);  
+                    </script>""")
+
             else:
                 mensaje = resultado.get("mensaje", "Error al registrar el evento.")
                 return HttpResponse(f"""<script>
