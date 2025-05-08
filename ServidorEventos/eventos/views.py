@@ -143,7 +143,8 @@ def nuevo_evento(request):
 
         #Comparar HASH
         hash_calculado = hashlib.sha256(integridad_str.encode()).hexdigest()
-        print("hash calculado")
+        print("hash recibido: ", hash_integridad)
+        print("hash calculado: ", hash_calculado)
 
         if hash_calculado!= hash_integridad:
             return Response({
