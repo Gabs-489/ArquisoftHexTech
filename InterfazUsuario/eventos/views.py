@@ -150,6 +150,12 @@ def nuevo_evento(request):
             causa = request.POST.get('causa')
             hora_inicio = request.POST.get('hora_inicio_consulta')
 
+            if not all([fecha_evento, tipo_evento, causa,hora_inicio]):
+                mensaje = "Todos los campos son obligatorios."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
             hora_inicio_num = int(hora_inicio.replace(":", ""))
             integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{causa}|{hora_inicio_num}"
             
@@ -159,6 +165,12 @@ def nuevo_evento(request):
         elif tipo_evento == "cirugia":
             duracion = request.POST.get('duracion')
             hora_inicio = request.POST.get('hora_inicio')
+            if not all([fecha_evento, tipo_evento, duracion,hora_inicio]):
+                mensaje = "Todos los campos son obligatorios."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
             hora_inicio_num = int(hora_inicio.replace(":", ""))
             integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{duracion}|{hora_inicio_num}"
 
@@ -166,7 +178,12 @@ def nuevo_evento(request):
 
         elif tipo_evento == "prescripcion":
             medicamento = request.POST.get('medicamento')
-        
+            if not all([fecha_evento, tipo_evento, medicamento]):
+                mensaje = "Todos los campos son obligatorios."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
             integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{medicamento}"
 
             evento = {"medicamento":medicamento}
@@ -175,7 +192,12 @@ def nuevo_evento(request):
             nombre = request.POST.get('nombre')
             peso_archivo = request.POST.get('peso_archivo')
             path = request.POST.get('path')
-        
+            if not all([fecha_evento, tipo_evento, nombre, peso_archivo, ]):
+                mensaje = "Todos los campos son obligatorios."
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
             integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{nombre}|{peso_archivo}|{path}"
 
             evento = {"nombre":nombre, "peso_archivo":peso_archivo, "path":path}
@@ -221,8 +243,8 @@ def nuevo_evento(request):
                 return HttpResponse(f"""<script>
                                         alert("{mensaje_escapado}");
                                        setTimeout(function() {{
-                                            window.location.href = "/interfaz/eventos/nuevo";
-                                        }}, 5000);
+                                window.location.href = "/interfaz/eventos/nuevo";
+                            }}, 5000);
                                 </script>""")
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
