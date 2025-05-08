@@ -231,6 +231,7 @@ def nuevo_evento(request):
 
             if response.status_code == 200 :
                 mensaje = resultado.get("mensaje", "Evento registrado exitosamente.")
+                mensaje_escapado = escape(mensaje)
                 return HttpResponse(f"""<script>
                                         alert("{mensaje_escapado}");
                                        setTimeout(function() {{
