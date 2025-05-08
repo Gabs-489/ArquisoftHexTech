@@ -223,21 +223,6 @@ def nuevo_evento(request):
         evento["descripcion"] = descripcion
         evento["hash_integridad"] = hash_integridad
         
-        return HttpResponse(f"""
-            <html>
-                <head>
-                    <title>Redirigiendo...</title>
-                </head>
-                <body>
-                    <script type="text/javascript">
-                        alert("Prueba");  // Muestra la ventana emergente
-                        setTimeout(function() {{
-                            window.location.href = "/interfaz/eventos/nuevo";  // Redirige después de 500ms
-                        }}, 500);
-                    </script>
-                </body>
-            </html>
-        """)
 
         try:
             response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/crear/nuevo", json=evento, timeout=10)
@@ -245,26 +230,57 @@ def nuevo_evento(request):
 
             if response.status_code == 200 :
                 mensaje = resultado.get("mensaje", "Evento registrado exitosamente.")
-                return HttpResponse(f"""<script>
-                        alert("{mensaje}");
-                        setTimeout(function() {{
-                            window.location.href = "/interfaz/eventos/nuevo";
-                        }}, 500);  
-                    </script>""")
+                return HttpResponse(f"""
+                    <html>
+                        <head>
+                            <title>Redirigiendo...</title>
+                        </head>
+                        <body>
+                            <script type="text/javascript">
+                                alert("{mensaje}");  // Muestra la ventana emergente
+                                setTimeout(function() {{
+                                    window.location.href = "/interfaz/eventos/nuevo";
+                                }}, 1000);
+                            </script>
+                        </body>
+                    </html>
+                """)
 
             else:
                 mensaje = resultado.get("mensaje", "Error al registrar el evento.")
                 print("Error",mensaje)
-                return HttpResponse(f"""<script>
-                                    alert("{mensaje}");
+                return HttpResponse(f"""
+                    <html>
+                        <head>
+                            <title>Redirigiendo...</title>
+                        </head>
+                        <body>
+                            <script type="text/javascript">
+                                alert("{mensaje}");  // Muestra la ventana emergente
+                                setTimeout(function() {{
                                     window.location.href = "/interfaz/eventos/nuevo";
-                                </script>""")
+                                }}, 1000);
+                            </script>
+                        </body>
+                    </html>
+                """)
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
-            return HttpResponse(f"""<script>
-                                    alert("{mensaje}");
+            return HttpResponse(f"""
+                    <html>
+                        <head>
+                            <title>Redirigiendo...</title>
+                        </head>
+                        <body>
+                            <script type="text/javascript">
+                                alert("{mensaje}");  // Muestra la ventana emergente
+                                setTimeout(function() {{
                                     window.location.href = "/interfaz/eventos/nuevo";
-                                </script>""")
+                                }}, 1000);
+                            </script>
+                        </body>
+                    </html>
+                """)
     context = {
         "paciente": paciente_data
     }
