@@ -209,8 +209,8 @@ def nuevo_evento(request):
                                 </script>""")
 
         #Para la prueba se pregunta si cambiar el mensaje 
-        cambiar = input("Ingrese 1 si desea cambiar el mensaje: ")
-        if cambiar==1:
+        cambiar = (input("Ingrese 1 si desea cambiar el mensaje: "))
+        if cambiar=="1":
             integridad_str="Mensaje modificado"
 
         print(integridad_str)
