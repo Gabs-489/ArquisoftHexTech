@@ -148,6 +148,11 @@ def nuevo_evento(request):
         if tipo_evento == "consulta":
             causa = request.POST.get('causa')
             hora_inicio = request.POST.get('hora_inicio')
+            print("fecha:", fecha_evento)
+            print("tipo:", tipo_evento)
+            print("causa:", causa)
+            print("hora:", hora_inicio)
+
             if not all([fecha_evento, tipo_evento, causa,hora_inicio]):
                 mensaje = "Todos los campos son obligatorios."
                 return HttpResponse(f"""<script>
