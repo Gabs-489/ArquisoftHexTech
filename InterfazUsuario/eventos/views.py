@@ -223,10 +223,22 @@ def nuevo_evento(request):
         evento["descripcion"] = descripcion
         evento["hash_integridad"] = hash_integridad
         
-        return HttpResponse(f"""<script>
-                                    alert("Prueba");
-                                    window.location.href = "/interfaz/eventos/nuevo";
-                                </script>""")
+        return HttpResponse(f"""
+            <html>
+                <head>
+                    <title>Redirigiendo...</title>
+                </head>
+                <body>
+                    <script type="text/javascript">
+                        alert("Prueba");  // Muestra la ventana emergente
+                        setTimeout(function() {{
+                            window.location.href = "/interfaz/eventos/nuevo";  // Redirige después de 500ms
+                        }}, 500);
+                    </script>
+                </body>
+            </html>
+        """)
+
         try:
             response = requests.post(f"{MICROSERVICIO_EVENTOS_URL}/crear/nuevo", json=evento, timeout=10)
             resultado = response.json()
