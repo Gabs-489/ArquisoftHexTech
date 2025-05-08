@@ -242,7 +242,9 @@ def nuevo_evento(request):
                 mensaje_escapado = escape(mensaje)
                 return HttpResponse(f"""<script>
                                         alert("{mensaje_escapado}");
-                                        window.location.href = "/interfaz/eventos/nuevo";
+                                       setTimeout(function() {{
+                                            window.location.href = "/interfaz/eventos/nuevo";
+                                        }}, 10000);
                                 </script>""")
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
