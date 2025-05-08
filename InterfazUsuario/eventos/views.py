@@ -147,7 +147,7 @@ def nuevo_evento(request):
 
         if tipo_evento == "consulta":
             causa = request.POST.get('causa')
-            hora_inicio = request.POST.get('hora_inicio')
+            hora_inicio = request.POST.get('hora_inicio_consulta')
             print("fecha:", fecha_evento)
             print("tipo:", tipo_evento)
             print("causa:", causa)
