@@ -232,8 +232,10 @@ def nuevo_evento(request):
             if response.status_code == 200 :
                 mensaje = resultado.get("mensaje", "Evento registrado exitosamente.")
                 return HttpResponse(f"""<script>
-                                        alert("{mensaje}");
-                                        window.location.href = "/interfaz/eventos/nuevo";
+                                        alert("{mensaje_escapado}");
+                                       setTimeout(function() {{
+                                window.location.href = "/interfaz/eventos/nuevo";
+                            }}, 5000);
                                 </script>""")
 
             else:
