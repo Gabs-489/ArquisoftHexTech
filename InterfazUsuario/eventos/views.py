@@ -232,15 +232,18 @@ def nuevo_evento(request):
                 return HttpResponse(f"""<script>
                         alert("{mensaje}");
                         setTimeout(function() {{
-                            window.location.href = "/interfaz/eventos/EEG";
+                            window.location.href = "/interfaz/eventos/nuevo";
                         }}, 500);  
                     </script>""")
 
             else:
                 mensaje = resultado.get("mensaje", "Error al registrar el evento.")
+                print("Error", mensaje)
                 return HttpResponse(f"""<script>
                                 alert("{mensaje}");
-                                window.location.href = "/interfaz/eventos/nuevo";
+                                setTimeout(function() {{
+                            window.location.href = "/interfaz/eventos/nuevo";
+                        }}, 500); 
                                 </script>""")
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
