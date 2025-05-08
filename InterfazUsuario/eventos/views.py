@@ -231,41 +231,19 @@ def nuevo_evento(request):
 
             if response.status_code == 200 :
                 mensaje = resultado.get("mensaje", "Evento registrado exitosamente.")
-                return HttpResponse(f"""
-                    <html>
-                        <head>
-                            <title>Redirigiendo...</title>
-                        </head>
-                        <body>
-                            <script type="text/javascript">
-                                alert("{mensaje}");  // Muestra la ventana emergente
-                                setTimeout(function() {{
-                                    window.location.href = "/interfaz/eventos/nuevo";
-                                }}, 1000);
-                            </script>
-                        </body>
-                    </html>
-                """)
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
 
             else:
                 mensaje = resultado.get("mensaje", "Error al registrar el evento.")
                 print("Error",mensaje)
                 mensaje_escapado = escape(mensaje)
-                return HttpResponse(f"""
-                    <html>
-                        <head>
-                            <title>Redirigiendo...</title>
-                        </head>
-                        <body>
-                            <script type="text/javascript">
-                                alert("{mensaje}");  // Muestra la ventana emergente
-                                setTimeout(function() {{
-                                    window.location.href = "/interfaz/eventos/nuevo";
-                                }}, 10000);
-                            </script>
-                        </body>
-                    </html>
-                """)
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje_escapado}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
             return HttpResponse(f"""
