@@ -211,7 +211,7 @@ def nuevo_evento(request):
         #Para la prueba se pregunta si cambiar el mensaje 
         cambiar = input("Ingrese 1 si desea cambiar el mensaje: ")
         if cambiar==1:
-            hash_integridad="Mensaje modificado"
+            integridad_str="Mensaje modificado"
 
         # Crear string de integridad y calcular el hash
         hash_integridad = hashlib.sha256(integridad_str.encode()).hexdigest()
