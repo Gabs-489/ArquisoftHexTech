@@ -132,8 +132,11 @@ def nuevo_evento(request):
 
     if not paciente_data:
         mensaje = "No se encontró información del paciente."
-        return mostrar_modal(request, mensaje, "/interfaz/eventos")
-    
+        return HttpResponse(f"""<script>
+                                alert("{mensaje}");
+                                window.location.href = "/interfaz/eventos";
+                            </script>""")
+
     if request.method == 'POST':
 
         integridad_str = ""
@@ -148,7 +151,6 @@ def nuevo_evento(request):
 
             if not all([fecha_evento, tipo_evento, causa,hora_inicio]):
                 mensaje = "Todos los campos son obligatorios."
-                return mostrar_modal(request, mensaje, "/interfaz/eventos/nuevo")
                 return HttpResponse(f"""<script>
                                         alert("{mensaje}");
                                         window.location.href = "/interfaz/eventos/nuevo";
@@ -164,7 +166,10 @@ def nuevo_evento(request):
             hora_inicio = request.POST.get('hora_inicio')
             if not all([fecha_evento, tipo_evento, duracion,hora_inicio]):
                 mensaje = "Todos los campos son obligatorios."
-                return mostrar_modal(request, mensaje, "/interfaz/eventos/nuevo")
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
             hora_inicio_num = int(hora_inicio.replace(":", ""))
             integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{duracion}|{hora_inicio_num}"
 
@@ -174,7 +179,10 @@ def nuevo_evento(request):
             medicamento = request.POST.get('medicamento')
             if not all([fecha_evento, tipo_evento, medicamento]):
                 mensaje = "Todos los campos son obligatorios."
-                return mostrar_modal(request, mensaje, "/interfaz/eventos/nuevo")
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
             integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{medicamento}"
 
             evento = {"medicamento":medicamento}
@@ -185,14 +193,20 @@ def nuevo_evento(request):
             path = request.POST.get('path')
             if not all([fecha_evento, tipo_evento, nombre, peso_archivo, ]):
                 mensaje = "Todos los campos son obligatorios."
-                return mostrar_modal(request, mensaje, "/interfaz/eventos/nuevo")
+                return HttpResponse(f"""<script>
+                                        alert("{mensaje}");
+                                        window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
             integridad_str = f"{fecha_evento}|{tipo_evento}|{descripcion}|{nombre}|{peso_archivo}|{path}"
 
             evento = {"nombre":nombre, "peso_archivo":peso_archivo, "path":path}
 
         else:
             mensaje = "Debe elegir un tipo de evento."
-            return mostrar_modal(request, mensaje, "/interfaz/eventos/nuevo")
+            return HttpResponse(f"""<script>
+                                    alert("{mensaje}");
+                                    window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
 
         #Para la prueba se pregunta si cambiar el mensaje 
         cambiar = input("Ingrese 1 si desea cambiar el mensaje: ")
@@ -214,10 +228,16 @@ def nuevo_evento(request):
 
             if response.status_code == 200 :
                 mensaje = resultado.get("mensaje", "Evento registrado exitosamente.")
-                return mostrar_modal(request, mensaje, "/interfaz/eventos")
+                return HttpResponse(f"""<script>
+                                alert("{mensaje}");
+                                window.location.href = "/interfaz/eventos/EEG";
+                                </script>""")
             else:
                 mensaje = resultado.get("mensaje", "Error al registrar el evento.")
-                return mostrar_modal(request, mensaje, "/interfaz/eventos/nuevo")
+                return HttpResponse(f"""<script>
+                                alert("{mensaje}");
+                                window.location.href = "/interfaz/eventos/nuevo";
+                                </script>""")
         except requests.exceptions.RequestException as e:
             mensaje = f"Error de conexión con el microservicio: {str(e)}"
             return HttpResponse(f"""<script>
@@ -298,41 +318,3 @@ def solicitar_analisis(id_evento):
         print(f"Error al hacer la solicitud de analisis del examen {id_evento}: {e}")
         return None
 
-
-
-#Codigo para generar pantalla
-
-def mostrar_modal(request, mensaje, redirigir_a):
-    """
-    Función para generar un modal con un mensaje y redirigir a una URL.
-    El modal se muestra al usuario y el redireccionamiento se realiza cuando
-    el usuario hace clic en "Aceptar".
-    """
-    modal_html = f"""
-    <script>
-        var mensaje = "{mensaje}";
-        var modalHtml = `
-        <div class="modal" tabindex="-1" role="dialog" id="mensajeModal">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Mensaje</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>` + mensaje + `</p>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="{redirigir_a}" class="btn btn-primary">Aceptar</a>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-        
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-        $('#mensajeModal').modal('show');
-    </script>"""
-    
-    return HttpResponse(modal_html)
