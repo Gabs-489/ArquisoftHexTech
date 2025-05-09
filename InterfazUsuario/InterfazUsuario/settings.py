@@ -143,7 +143,7 @@ MICROSERVICIO_MONITOREO_URL = PATH_API_GATEWAY + "/monitoreo"
 #AUTH0
 LOGIN_URL = "/login/auth0" 
 LOGIN_REDIRECT_URL = "/" 
-LOGOUT_REDIRECT_URL = "https://dev-3b1b1yryi8mtzqkz.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.173.196.98:8080" 
+LOGOUT_REDIRECT_URL = "https://dev-3b1b1yryi8mtzqkz.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F35.193.40.115:8080" 
 
 SOCIAL_AUTH_TRAILING_SLASH = False # Remove end slash from routes 
 SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-3b1b1yryi8mtzqkz.us.auth0.com'
