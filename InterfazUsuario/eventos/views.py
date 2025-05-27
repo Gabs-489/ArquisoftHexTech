@@ -15,7 +15,7 @@ import requests
 # Create your views here.
 
 #Cargar todos los examenes
-@login_required
+#@login_required
 def cargar_eventos(request):
     print("iniciando conexion", MICROSERVICIO_EVENTOS_URL)
     try:
@@ -65,7 +65,7 @@ def cargar_eventos(request):
                             </script>
                             """)
 
-@login_required
+#@login_required
 def pag_paciente_examenes(request):
     paciente_data = request.session.get('paciente_data', None)
 
@@ -84,10 +84,10 @@ def pag_paciente_examenes(request):
         return redirect('/interfaz/eventos/EEG/analisis')
     return render(request, 'EEG/pag_paciente_examenes_EEG.html',context)
 
-@login_required
+#@login_required
 def analisis_eeg(request):
-    role = getRole(request)
-    if role == "Medico":
+    #role = getRole(request)
+    #if role == "Medico":
         paciente_data = request.session.get('paciente_data', None)
         archivos = get_examenes_eeg(paciente_data['eventos'])
         context = {
@@ -111,10 +111,10 @@ def analisis_eeg(request):
                                 </script>
                                 """)
         return render(request, 'EEG/archivos.html', context)
-    else:
-        return HttpResponse("Unauthorized User")
+    #else:
+        #return HttpResponse("Unauthorized User")
 
-@login_required
+#@login_required
 def resultados_eeg(request):
     paciente_data = request.session.get('paciente_data', None)
     if not paciente_data:
@@ -131,10 +131,10 @@ def resultados_eeg(request):
     }
     return render(request, 'EEG/resultados.html', context)
 
-@login_required
+#@login_required
 def nuevo_evento(request):
-    role = getRole(request)
-    if role == "Medico" or role == "Radiologo":
+    #role = getRole(request)
+    #if role == "Medico" or role == "Radiologo":
         paciente_data = request.session.get('paciente_data', None)
 
         if not paciente_data:
@@ -276,8 +276,8 @@ def nuevo_evento(request):
             "paciente": paciente_data
         }
         return render(request, 'EEG/nuevo_evento.html', context)
-    else:
-        return HttpResponse("Unauthorized User")
+    #else:
+        #return HttpResponse("Unauthorized User")
 
 
 def get_evento(request):
