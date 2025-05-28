@@ -1,4 +1,5 @@
 from ..models import EEG
+import json
 
 def get_archivos(id_examenes):
     queryset = EEG.objects.filter(id__in=id_examenes).order_by('-fecha')[:10]
