@@ -1,9 +1,24 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 {% load static %}
 {% load json_script %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
+    <style>
+        /* Estilos para detalle bonito */
+        .detalle-valor {
+            margin-left: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .detalle-lista {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .detalle-lista > li {
+            margin-bottom: 6px;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -32,7 +47,6 @@
                         </thead>
                         <tbody>
                         {% for archivo in lista_archivos %}
-                        {% with resultado=archivo.resultado_analisis|json_script:"resultado_json" %}
                         <tr>
                             <td>{{ archivo.id }}</td>
                             <td>{{ archivo.nombre }}</td>
@@ -41,7 +55,7 @@
                                 <div>
                                     <!-- Mostrar solo el campo 'diagnostico' -->
                                     <strong>Diagnóstico:</strong>
-                                    <span id="diagnostico-{{ archivo.id }}"></span>
+                                    <span id="diagnostico-{{ archivo.id }}" style="color:#0E2EB0; font-weight:bold;"></span>
 
                                     <!-- Botón para mostrar detalles -->
                                     <br>
@@ -51,7 +65,7 @@
 
                                     <!-- Contenedor oculto de detalles -->
                                     <div id="detalles-{{ archivo.id }}" style="display: none; margin-top: 10px;">
-                                        <ul id="detalle-lista-{{ archivo.id }}"></ul>
+                                        <ul class="detalle-lista" id="detalle-lista-{{ archivo.id }}"></ul>
                                     </div>
 
                                     <!-- Script con el JSON -->
@@ -61,7 +75,6 @@
                                 </div>
                             </td>
                         </tr>
-                        {% endwith %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -90,11 +103,36 @@
         const resultado = JSON.parse(document.getElementById("resultado_json_{{ archivo.id }}").textContent);
         document.getElementById("diagnostico-{{ archivo.id }}").textContent = resultado.diagnostico;
 
+        function formatValue(value) {
+            if (typeof value === 'object' && value !== null) {
+                if (Array.isArray(value)) {
+                    return value.map(v => formatValue(v)).join(', ');
+                } else {
+                    // Objeto: mostrar claves y valores en forma de lista
+                    let str = '';
+                    for (const [k,v] of Object.entries(value)) {
+                        str += `${k}: ${formatValue(v)}\n`;
+                    }
+                    return str.trim();
+                }
+            } else {
+                return String(value);
+            }
+        }
+
         const lista = document.getElementById("detalle-lista-{{ archivo.id }}");
+        lista.innerHTML = ''; // limpio por si acaso
         for (const [clave, valor] of Object.entries(resultado)) {
             if (clave !== "diagnostico") {
                 const item = document.createElement("li");
-                item.innerHTML = `<strong>${clave}:</strong> ${JSON.stringify(valor, null, 2)}`;
+                const valorFormateado = formatValue(valor);
+
+                // Si es objeto complejo, lo mostramos en bloque de texto con monospace
+                if (typeof valor === 'object' && valor !== null) {
+                    item.innerHTML = `<strong>${clave}:</strong><br><pre class="detalle-valor">${valorFormateado}</pre>`;
+                } else {
+                    item.innerHTML = `<strong>${clave}:</strong> ${valorFormateado}`;
+                }
                 lista.appendChild(item);
             }
         }
@@ -107,3 +145,4 @@
     }
 </script>
 {% endblock %}
+
