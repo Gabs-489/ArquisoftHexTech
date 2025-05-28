@@ -1,22 +1,22 @@
-{% extends 'EEG/base.html' %} 
+{% extends 'EEG/base.html' %}
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
-    <style>
-        .detalle-valor {
-            margin-left: 10px;
-            font-family: monospace;
-            white-space: pre-wrap;
-        }
-        .detalle-lista {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        .detalle-lista > li {
-            margin-bottom: 6px;
-        }
-    </style>
+<link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
+<style>
+    .detalle-valor {
+        margin-left: 10px;
+        font-family: monospace;
+        white-space: pre-wrap;
+    }
+    .detalle-lista {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .detalle-lista > li {
+        margin-bottom: 6px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -40,13 +40,6 @@
                                 <th>Fecha</th>
                                 <th>Ver Resultado</th>
                             </tr>
-                            <script>
-                                document.addEventListener("DOMContentLoaded", function () {
-                                  console.log("DOM cargado");
-                                  const jsonScripts = document.querySelectorAll("script[type='application/json']");
-                                  console.log("Scripts JSON encontrados:", jsonScripts.length);
-                                });
-                            </script>
                         </thead>
                         <tbody>
                             {% for archivo in lista_archivos %}
@@ -57,33 +50,41 @@
                                 <td>
                                     <div>
                                         <strong>Diagnóstico:</strong>
-                                        <span id="diagnostico-{{ archivo.id }}" style="color:#0E2EB0; font-weight:bold;"></span>
-                                
+                                        <span style="color:#0E2EB0; font-weight:bold;">
+                                            {{ archivo.resultado_analisis_parsed.diagnostico }}
+                                        </span>
+
                                         <br>
                                         <button class="btn btn-link" onclick="toggleDetalles({{ archivo.id }})">
                                             Ver detalles
                                         </button>
-                                
+
                                         <div id="detalles-{{ archivo.id }}" style="display: none; margin-top: 10px;">
-                                            <ul class="detalle-lista" id="detalle-lista-{{ archivo.id }}"></ul>
+                                            <ul class="detalle-lista">
+                                                {% for clave, valor in archivo.resultado_analisis_parsed.items %}
+                                                    {% if clave != 'diagnostico' %}
+                                                        <li>
+                                                            <strong>{{ clave }}:</strong>
+                                                            {% if valor is iterable and not valor|string %}
+                                                                <pre class="detalle-valor">{{ valor|json_script:"_" }}</pre>
+                                                            {% else %}
+                                                                {{ valor }}
+                                                            {% endif %}
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
                                         </div>
-                                
-                                        {% if archivo.resultado_analisis %}
-                                            {% with "resultado_json_"|add:archivo.id|stringformat:"s" as json_id %}
-                                                {{ archivo.resultado_analisis|json_script:json_id }}
-                                            {% endwith %}
-                                        {% endif %}
                                     </div>
                                 </td>
-
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                     {% else %}
-                        <div style="text-align: center; font-weight: bold; color: #0E2EB0; margin-top: 20px;">
-                            No hay resultados de EEG disponibles.
-                        </div>
+                    <div style="text-align: center; font-weight: bold; color: #0E2EB0; margin-top: 20px;">
+                        No hay resultados de EEG disponibles.
+                    </div>
                     {% endif %}
 
                     <div style="text-align:center;">
@@ -98,62 +99,7 @@
     </div>
 </div>
 
-<!-- JavaScript para procesar y mostrar detalles -->
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const jsonScripts = document.querySelectorAll("script[type='application/json']");
-    jsonScripts.forEach(script => {
-        console.log("ID script:", script.id);
-        console.log("Contenido JSON:", script.textContent);
-        try {
-            const resultado = JSON.parse(script.textContent);
-            console.log("Parsed resultado:", resultado);
-
-            const archivoId = script.id.split("_").pop();
-            const diagnosticoSpan = document.getElementById("diagnostico-" + archivoId);
-            if (diagnosticoSpan && resultado.diagnostico) {
-                diagnosticoSpan.textContent = resultado.diagnostico;
-            }
-
-            const lista = document.getElementById("detalle-lista-" + archivoId);
-            if (lista) {
-                lista.innerHTML = '';
-                for (const [clave, valor] of Object.entries(resultado)) {
-                    if (clave !== "diagnostico") {
-                        const item = document.createElement("li");
-                        const valorFormateado = formatValue(valor);
-                        if (typeof valor === 'object' && valor !== null) {
-                            item.innerHTML = `<strong>${clave}:</strong><br><pre class="detalle-valor">${valorFormateado}</pre>`;
-                        } else {
-                            item.innerHTML = `<strong>${clave}:</strong> ${valorFormateado}`;
-                        }
-                        lista.appendChild(item);
-                    }
-                }
-            }
-        } catch (e) {
-            console.error("Error parseando JSON para", script.id, e);
-        }
-    });
-
-    function formatValue(value) {
-        if (typeof value === 'object' && value !== null) {
-            if (Array.isArray(value)) {
-                return value.map(v => formatValue(v)).join(', ');
-            } else {
-                let str = '';
-                for (const [k, v] of Object.entries(value)) {
-                    str += `${k}: ${formatValue(v)}\n`;
-                }
-                return str.trim();
-            }
-        } else {
-            return String(value);
-        }
-    }
-});
-
 function toggleDetalles(id) {
     const div = document.getElementById("detalles-" + id);
     div.style.display = div.style.display === "none" ? "block" : "none";
@@ -161,3 +107,4 @@ function toggleDetalles(id) {
 </script>
 
 {% endblock %}
+
