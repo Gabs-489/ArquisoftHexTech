@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 
-class PacienteForm(forms.ModelForm):
+"""class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
         fields = [
@@ -19,3 +19,4 @@ class PacienteForm(forms.ModelForm):
             'correo' : 'Correo',
             'numero_identidad' : 'Numero_identidad'
         }
+"""
