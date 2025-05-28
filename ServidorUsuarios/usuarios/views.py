@@ -1,6 +1,7 @@
 import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from pymongo import MongoClient
 import requests
 
@@ -40,7 +41,7 @@ def mostrar_pacientes(request):
         else:
             return HttpResponse("unsuccessfully created measurement. Variable or place does not exist")"""
 
-@csrf_exempt # type: ignore
+@csrf_exempt
 def crear_paciente(request):
     if request.method == 'POST':
         try:
