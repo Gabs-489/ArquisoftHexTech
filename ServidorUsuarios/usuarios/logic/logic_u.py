@@ -46,7 +46,9 @@ def crear_paciente(data):
 
 def get_paciente(numero_identidad):
     col = get_paciente_collection()
+    print(col)
     paciente = col.find_one({"usuario.numero_identidad": numero_identidad})
+    print(paciente)
     return paciente 
 
 def get_pacientes():
