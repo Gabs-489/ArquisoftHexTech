@@ -76,16 +76,12 @@ WSGI_APPLICATION = 'ServidorUsuarios.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-#DATABASES = {
-#     'default': {
- #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-  #       'NAME': 'system_db',
-   #      'USER': 'hextech_user',
-    #     'PASSWORD': 'isis2503',
-     #    'HOST': '10.128.0.20',
-      #   'PORT': '',
-     #}
- #}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.dummy'
+    }
+}
+
 
 
 # Password validation
