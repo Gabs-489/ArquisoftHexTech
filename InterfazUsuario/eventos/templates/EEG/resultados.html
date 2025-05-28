@@ -48,7 +48,6 @@
                                 <td>{{ archivo.nombre }}</td>
                                 <td>{{ archivo.fecha }}</td>
                                 <td>
-                                    <pre>{{ archivo.resultado_analisis}}</pre>
 
                                     <div>
                                         <strong>Diagnóstico:</strong>
@@ -69,7 +68,11 @@
                                                             <strong>{{ clave }}:</strong>
                                                             <span class="detalle-valor">
                                                                 {% if valor.items %}
-                                                                    {{ valor|safe }}
+                                                                    <ul>
+                                                                        {% for subclave, subvalor in valor.items %}
+                                                                            <li><strong>{{ subclave }}:</strong> {{ subvalor }}</li>
+                                                                        {% endfor %}
+                                                                    </ul>
                                                                 {% elif valor.0 and valor != '' %}
                                                                     {{ valor }}
                                                                 {% else %}
