@@ -26,9 +26,12 @@ def crear_resultado(form):
     archivo.save()
     return ()  
 
-def actualizar_archivo(archivo_id,resultado):
+def actualizar_archivo(archivo_id, resultado):
     archivo = get_archivo(archivo_id)
-    if archivo != None:
+    if archivo is not None:
+        # Asegurarse de guardar una cadena
+        if not isinstance(resultado, str):
+            resultado = json.dumps(resultado)
         archivo.resultado_analisis = resultado
         archivo.save()
     print(archivo)
