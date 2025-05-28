@@ -1,22 +1,33 @@
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from pymongo import MongoClient
 import requests
 
-from ServidorUsuarios.settings import HISTORIAS_CLINICAS_API
+from ServidorUsuarios.settings import HISTORIAS_CLINICAS_API,MONGO_CLI
 from usuarios.serializers import Paciente_serializer
 
 from .logic.logic_u import get_paciente
-from .models import Paciente
+from .models import Paciente, UsuarioBase
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 # Create your views here.
 def mostrar_pacientes(request):
-    return HttpResponse(status=204)
+    client = MongoClient(MONGO_CLI)
+    db = client.monitoring_db 
+    pacientes_col = db['pacientes']
+    pacientes = list(pacientes_col.find())
+    client.close()
 
-def crear_paciente(request):
+    # convertir ObjectId a string para JSON
+    for paciente in pacientes:
+        paciente['_id'] = str(paciente['_id'])
+
+    return JsonResponse(pacientes, safe=False)
+
+"""def crear_paciente(request):
     if request.method == 'POST':
         data = request.body.decode('utf-8')
         data_json = json.loads(data)
@@ -29,11 +40,44 @@ def crear_paciente(request):
             paciente.save()
             return HttpResponse("successfully created measurement")
         else:
-            return HttpResponse("unsuccessfully created measurement. Variable or place does not exist")
+            return HttpResponse("unsuccessfully created measurement. Variable or place does not exist")"""
+
+@csrf_exempt # type: ignore
+def crear_paciente(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+
+            # Conectar a MongoDB
+            client = MongoClient(MONGO_CLI)
+            db = client.monitoring_db # Cambia al nombre real
+            pacientes_col = db['pacientes']
+
+            existe = pacientes_col.find_one({"usuario.numero_identidad": data['numero_identidad']})
+            if existe is None:
+                paciente_doc = {
+                    "usuario": {
+                        "nombre": data['nombre'],
+                        "apellidos": data.get('apellidos', ''),
+                        "celular": data['celular'],
+                        "correo": data['correo'],
+                        "numero_identidad": data['numero_identidad']
+                    },
+                    "edad": data.get('edad', ''),
+                    "eventos": []
+                }
+                pacientes_col.insert_one(paciente_doc)
+                client.close()
+                return JsonResponse({"message": "Paciente creado exitosamente"}, status=201)
+            else:
+                client.close()
+                return JsonResponse({"error": "Paciente ya existe"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    return JsonResponse({"error": "Método no permitido"}, status=405)
 
 
-
-@api_view(['GET'])
+"""@api_view(['GET'])
 def obtener_examenes_paciente(request, numero_identidad_paciente):
     print("Conexion establecida")
     paciente = get_paciente(numero_identidad_paciente)
@@ -41,7 +85,16 @@ def obtener_examenes_paciente(request, numero_identidad_paciente):
         return Response({"error": "Paciente no encontrado"}, status=404)
     serializer = Paciente_serializer(paciente)
     print("Retornando paciente con cedula",numero_identidad_paciente)
-    return Response(serializer.data)
+    return Response(serializer.data)"""
+
+@api_view(['GET'])
+def obtener_examenes_paciente(request, numero_identidad_paciente):
+    paciente = get_paciente(numero_identidad_paciente)  # dict o None
+
+    if paciente is None:
+        return Response({"error": "Paciente no encontrado"}, status=404)
+    return Response(paciente)
+
 
 @api_view(['GET'])
 def obtener_historias_de_pacientes(request):

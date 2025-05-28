@@ -5,3 +5,4 @@ google-cloud-storage==1.42.3
 django-storages==1.13.2
 djangorestframework==3.14.0
 social-auth-app-django==5.4.0
+mongoengine>=0.27.0

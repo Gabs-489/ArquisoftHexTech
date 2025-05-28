@@ -76,16 +76,16 @@ WSGI_APPLICATION = 'ServidorUsuarios.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': 'system_db',
-         'USER': 'hextech_user',
-         'PASSWORD': 'isis2503',
-         'HOST': '10.128.0.20',
-         'PORT': '',
-     }
- }
+#DATABASES = {
+#     'default': {
+ #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+  #       'NAME': 'system_db',
+   #      'USER': 'hextech_user',
+    #     'PASSWORD': 'isis2503',
+     #    'HOST': '10.128.0.20',
+      #   'PORT': '',
+     #}
+ #}
 
 
 # Password validation
@@ -139,3 +139,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 HISTORIAS_CLINICAS_API = "http://" + os.environ.get("HC_API", "104.198.16.75") + ":" + os.environ.get("HC_PORT", "8080")
+
+MONGO_CLI = os.environ['MONGO_CLIENT']
