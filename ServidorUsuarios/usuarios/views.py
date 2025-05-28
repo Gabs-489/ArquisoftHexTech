@@ -5,10 +5,8 @@ from pymongo import MongoClient
 import requests
 
 from ServidorUsuarios.settings import HISTORIAS_CLINICAS_API,MONGO_CLI
-from usuarios.serializers import Paciente_serializer
 
 from .logic.logic_u import get_paciente
-from .models import Paciente, UsuarioBase
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
