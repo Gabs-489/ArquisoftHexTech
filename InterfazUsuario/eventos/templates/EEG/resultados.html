@@ -40,6 +40,13 @@
                                 <th>Fecha</th>
                                 <th>Ver Resultado</th>
                             </tr>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                  console.log("DOM cargado");
+                                  const jsonScripts = document.querySelectorAll("script[type='application/json']");
+                                  console.log("Scripts JSON encontrados:", jsonScripts.length);
+                                });
+                            </script>
                         </thead>
                         <tbody>
                             {% for archivo in lista_archivos %}
