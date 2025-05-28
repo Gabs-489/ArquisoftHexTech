@@ -65,11 +65,15 @@
                                                     {% if clave != 'diagnostico' %}
                                                         <li>
                                                             <strong>{{ clave }}:</strong>
-                                                            {% if valor is iterable and not valor|string %}
-                                                                <pre class="detalle-valor">{{ valor|json_script:"_" }}</pre>
-                                                            {% else %}
-                                                                {{ valor }}
-                                                            {% endif %}
+                                                            <span class="detalle-valor">
+                                                                {% if valor.items %}
+                                                                    {{ valor|safe }}
+                                                                {% elif valor.0 and valor != '' %}
+                                                                    {{ valor }}
+                                                                {% else %}
+                                                                    {{ valor }}
+                                                                {% endif %}
+                                                            </span>
                                                         </li>
                                                     {% endif %}
                                                 {% endfor %}
@@ -105,6 +109,6 @@ function toggleDetalles(id) {
     div.style.display = div.style.display === "none" ? "block" : "none";
 }
 </script>
-
 {% endblock %}
+
 
