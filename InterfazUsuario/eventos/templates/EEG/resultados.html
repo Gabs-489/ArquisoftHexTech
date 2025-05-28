@@ -48,6 +48,16 @@
                                 <td>{{ archivo.nombre }}</td>
                                 <td>{{ archivo.fecha }}</td>
                                 <td>
+                                    {% if archivo.resultado_analisis_parsed %}
+                                        <p style="color: green;">
+                                            resultado_analisis_parsed está presente y su tipo es: {{ archivo.resultado_analisis_parsed.__class__.__name__ }}
+                                        </p>
+                                    {% else %}
+                                        <p style="color: red;">
+                                            resultado_analisis_parsed está vacío o no existe.
+                                        </p>
+                                    {% endif %}
+
                                     <div>
                                         <strong>Diagnóstico:</strong>
                                         <span style="color:#0E2EB0; font-weight:bold;">
