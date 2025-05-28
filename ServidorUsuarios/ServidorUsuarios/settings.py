@@ -140,4 +140,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 HISTORIAS_CLINICAS_API = "http://" + os.environ.get("HC_API", "104.198.16.75") + ":" + os.environ.get("HC_PORT", "8080")
 
-MONGO_CLI = os.environ['MONGO_CLIENT']
+MONGO_CLI = os.environ['MONGO_CLI']
