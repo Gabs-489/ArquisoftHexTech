@@ -49,7 +49,7 @@ def crear_paciente(request):
 
             # Conectar a MongoDB
             client = MongoClient(MONGO_CLI)
-            db = client.monitoring_db # Cambia al nombre real
+            db = client.monitoring_db
             pacientes_col = db['pacientes']
 
             existe = pacientes_col.find_one({"usuario.numero_identidad": data['numero_identidad']})
@@ -63,7 +63,7 @@ def crear_paciente(request):
                         "numero_identidad": data['numero_identidad']
                     },
                     "edad": data.get('edad', ''),
-                    "eventos": []
+                    "eventos": data.get('eventos', [])
                 }
                 pacientes_col.insert_one(paciente_doc)
                 client.close()
@@ -74,6 +74,7 @@ def crear_paciente(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
     return JsonResponse({"error": "Método no permitido"}, status=405)
+
 
 
 """@api_view(['GET'])
