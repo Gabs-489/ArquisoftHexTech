@@ -48,12 +48,12 @@
                                 <td>{{ archivo.nombre }}</td>
                                 <td>{{ archivo.fecha }}</td>
                                 <td>
-                                    <pre>{{ archivo.resultado_analisis_parsed }}</pre>
+                                    <pre>{{ archivo.resultado_analisis}}</pre>
 
                                     <div>
                                         <strong>Diagnóstico:</strong>
                                         <span style="color:#0E2EB0; font-weight:bold;">
-                                            {{ archivo.resultado_analisis_parsed.diagnostico }}
+                                            {{ archivo.resultado_analisis.diagnostico }}
                                         </span>
 
                                         <br>
@@ -63,7 +63,7 @@
 
                                         <div id="detalles-{{ archivo.id }}" style="display: none; margin-top: 10px;">
                                             <ul class="detalle-lista">
-                                                {% for clave, valor in archivo.resultado_analisis_parsed.items %}
+                                                {% for clave, valor in archivo.resultado_analisis.items %}
                                                     {% if clave != 'diagnostico' %}
                                                         <li>
                                                             <strong>{{ clave }}:</strong>
