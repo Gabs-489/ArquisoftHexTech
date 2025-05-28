@@ -1,22 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load json_script %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
 {% endblock %}
-{% block content %}
 
+{% block content %}
 <div class="content">
     <div class="">
         <div class="page-header-title">
-            <h4 class="page-title">Elegir resultado </h4>
-            <!--- 
-            <div style="text-align:right;">
-                <button type="button" class="btn btn-success waves-effect waves-light"
-                        onClick=" window.location.href='/measurementcreate' " style="text-align:center;">+
-                </button>
-            </div>
-            --->
+            <h4 class="page-title">Elegir resultado</h4>
         </div>
     </div>
 
@@ -24,8 +18,6 @@
 
     <div class="page-content-wrapper">
         <div class="container">
-            <!-- Content page -->
-
             <div class="panel panel-default">
                 <div class="panel-body">
                     {% if lista_archivos|length > 0 %}
@@ -39,16 +31,38 @@
                         </tr>
                         </thead>
                         <tbody>
-
                         {% for archivo in lista_archivos %}
+                        {% with resultado=archivo.resultado_analisis|json_script:"resultado_json" %}
                         <tr>
                             <td>{{ archivo.id }}</td>
                             <td>{{ archivo.nombre }}</td>
                             <td>{{ archivo.fecha }}</td>
-                            <td> {{archivo.resultado_analisis}}</td>
-                        </tr>
-                        {% endfor %}
+                            <td>
+                                <div>
+                                    <!-- Mostrar solo el campo 'diagnostico' -->
+                                    <strong>Diagnóstico:</strong>
+                                    <span id="diagnostico-{{ archivo.id }}"></span>
 
+                                    <!-- Botón para mostrar detalles -->
+                                    <br>
+                                    <button class="btn btn-link" onclick="toggleDetalles({{ archivo.id }})">
+                                        Ver detalles
+                                    </button>
+
+                                    <!-- Contenedor oculto de detalles -->
+                                    <div id="detalles-{{ archivo.id }}" style="display: none; margin-top: 10px;">
+                                        <ul id="detalle-lista-{{ archivo.id }}"></ul>
+                                    </div>
+
+                                    <!-- Script con el JSON -->
+                                    <script type="application/json" id="resultado_json_{{ archivo.id }}">
+                                        {{ archivo.resultado_analisis|safe }}
+                                    </script>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
                         </tbody>
                     </table>
                     {% else %}
@@ -63,11 +77,33 @@
                             Back
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- JavaScript para mostrar diagnostico y detalles -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        {% for archivo in lista_archivos %}
+        const resultado = JSON.parse(document.getElementById("resultado_json_{{ archivo.id }}").textContent);
+        document.getElementById("diagnostico-{{ archivo.id }}").textContent = resultado.diagnostico;
+
+        const lista = document.getElementById("detalle-lista-{{ archivo.id }}");
+        for (const [clave, valor] of Object.entries(resultado)) {
+            if (clave !== "diagnostico") {
+                const item = document.createElement("li");
+                item.innerHTML = `<strong>${clave}:</strong> ${JSON.stringify(valor, null, 2)}`;
+                lista.appendChild(item);
+            }
+        }
+        {% endfor %}
+    });
+
+    function toggleDetalles(id) {
+        const div = document.getElementById("detalles-" + id);
+        div.style.display = div.style.display === "none" ? "block" : "none";
+    }
+</script>
 {% endblock %}
