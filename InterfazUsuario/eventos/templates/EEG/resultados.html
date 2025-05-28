@@ -92,39 +92,23 @@
 </div>
 
 <!-- JavaScript para procesar y mostrar detalles -->
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const jsonScripts = document.querySelectorAll("script[type='application/json']");
-
-        jsonScripts.forEach(script => {
-            const id = script.id;  // ejemplo: "resultado_json_5"
-            const archivoId = id.split("_").pop();
+document.addEventListener("DOMContentLoaded", function () {
+    const jsonScripts = document.querySelectorAll("script[type='application/json']");
+    jsonScripts.forEach(script => {
+        console.log("ID script:", script.id);
+        console.log("Contenido JSON:", script.textContent);
+        try {
             const resultado = JSON.parse(script.textContent);
+            console.log("Parsed resultado:", resultado);
 
-            // Mostrar diagnóstico
+            const archivoId = script.id.split("_").pop();
             const diagnosticoSpan = document.getElementById("diagnostico-" + archivoId);
             if (diagnosticoSpan && resultado.diagnostico) {
                 diagnosticoSpan.textContent = resultado.diagnostico;
             }
 
-            // Formatear valor recursivamente
-            function formatValue(value) {
-                if (typeof value === 'object' && value !== null) {
-                    if (Array.isArray(value)) {
-                        return value.map(v => formatValue(v)).join(', ');
-                    } else {
-                        let str = '';
-                        for (const [k, v] of Object.entries(value)) {
-                            str += `${k}: ${formatValue(v)}\n`;
-                        }
-                        return str.trim();
-                    }
-                } else {
-                    return String(value);
-                }
-            }
-
-            // Insertar detalles
             const lista = document.getElementById("detalle-lista-" + archivoId);
             if (lista) {
                 lista.innerHTML = '';
@@ -141,12 +125,32 @@
                     }
                 }
             }
-        });
+        } catch (e) {
+            console.error("Error parseando JSON para", script.id, e);
+        }
     });
 
-    function toggleDetalles(id) {
-        const div = document.getElementById("detalles-" + id);
-        div.style.display = div.style.display === "none" ? "block" : "none";
+    function formatValue(value) {
+        if (typeof value === 'object' && value !== null) {
+            if (Array.isArray(value)) {
+                return value.map(v => formatValue(v)).join(', ');
+            } else {
+                let str = '';
+                for (const [k, v] of Object.entries(value)) {
+                    str += `${k}: ${formatValue(v)}\n`;
+                }
+                return str.trim();
+            }
+        } else {
+            return String(value);
+        }
     }
+});
+
+function toggleDetalles(id) {
+    const div = document.getElementById("detalles-" + id);
+    div.style.display = div.style.display === "none" ? "block" : "none";
+}
 </script>
+
 {% endblock %}
