@@ -27,7 +27,7 @@
     <div class="page-content-wrapper">
         <div class="container">
             <!-- Content page -->
-            <h5>Bienvenido al análisis EEG para el paciente: {{paciente.nombre}} {{paciente.apellidos}}</h5>
+            <h5>Bienvenido al análisis EEG para el paciente: {{paciente.usuario.nombre}} {{paciente.usuario.apellidos}}</h5>
             <div class="center-buttons">
                 <form method="POST" >
                     {% csrf_token %}
@@ -43,7 +43,7 @@
     <div class="page-content-wrapper">
         <div class="container">
             <!-- Content page -->
-            <h5>Bienvenido al gestor de eventos medicos: {{paciente.nombre}} {{paciente.apellidos}}</h5>
+            <h5>Bienvenido al gestor de eventos medicos: {{paciente.usuario.nombre}} {{paciente.usuario.apellidos}}</h5>
             <div class="center-buttons">
                 
                 <button class="button-blue" onclick="window.location.href='/interfaz/eventos/nuevo'">Crear nuevo evento medico</button>
