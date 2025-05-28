@@ -51,31 +51,16 @@
                                     <div>
                                         <strong>Diagnóstico:</strong>
                                         <span id="diagnostico-{{ archivo.id }}" style="color:#0E2EB0; font-weight:bold;"></span>
-                                        <pre>
-                                        {{ archivo.resultado_analisis|safe }}
-                                        </pre>
-                                        
-                                        <script>
-                                        try {
-                                            const data = JSON.parse('{{ archivo.resultado_analisis|escapejs }}');
-                                            console.log('JSON válido:', data);
-                                        } catch(e) {
-                                            console.error('No es JSON válido:', e);
-                                        }
-                                        </script>
-
-
-                                       
-
+                                
                                         <br>
                                         <button class="btn btn-link" onclick="toggleDetalles({{ archivo.id }})">
                                             Ver detalles
                                         </button>
-
+                                
                                         <div id="detalles-{{ archivo.id }}" style="display: none; margin-top: 10px;">
                                             <ul class="detalle-lista" id="detalle-lista-{{ archivo.id }}"></ul>
                                         </div>
-
+                                
                                         {% if archivo.resultado_analisis %}
                                             {% with "resultado_json_"|add:archivo.id|stringformat:"s" as json_id %}
                                                 {{ archivo.resultado_analisis|json_script:json_id }}
@@ -83,6 +68,7 @@
                                         {% endif %}
                                     </div>
                                 </td>
+
                             </tr>
                             {% endfor %}
                         </tbody>
