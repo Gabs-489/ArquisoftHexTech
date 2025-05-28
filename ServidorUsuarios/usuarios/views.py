@@ -93,6 +93,7 @@ def obtener_examenes_paciente(request, numero_identidad_paciente):
 
     if paciente is None:
         return Response({"error": "Paciente no encontrado"}, status=404)
+    paciente.pop('_id', None)
     return Response(paciente)
 
 
