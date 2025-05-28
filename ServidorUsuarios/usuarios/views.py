@@ -7,7 +7,7 @@ import requests
 
 from ServidorUsuarios.settings import HISTORIAS_CLINICAS_API,MONGO_CLI
 
-from .logic.logic_u import get_paciente
+from .logic.logic_u import eliminar_paciente, get_paciente, actualizar_paciente
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -127,3 +127,28 @@ def obtener_historia_de_un_paciente(request, numero_identidad_paciente):
 
     except requests.exceptions.RequestException as e:
         return Response({"error": str(e)}, status=500)
+
+
+@csrf_exempt
+def actualizar_paciente_view(request, numero_identidad):
+    if request.method == 'PUT':
+        try:
+            nuevos_datos = json.loads(request.body)
+            count = actualizar_paciente(numero_identidad, nuevos_datos)
+            if count:
+                return JsonResponse({'message': 'Paciente actualizado'}, status=200)
+            else:
+                return JsonResponse({'error': 'Paciente no encontrado o sin cambios'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+def eliminar_paciente_view(request, numero_identidad):
+    if request.method == 'DELETE':
+        count = eliminar_paciente(numero_identidad)
+        if count:
+            return JsonResponse({'message': 'Paciente eliminado'}, status=200)
+        else:
+            return JsonResponse({'error': 'Paciente no encontrado'}, status=404)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)

@@ -7,4 +7,6 @@ urlpatterns = [
     path('usuarios/pacientes/<str:numero_identidad_paciente>', obtener_examenes_paciente, name='obtener_examenes_paciente'),
     path('usuarios/historias_usuario', obtener_historias_de_pacientes, name='obtener_historias_de_pacientes'),
     path('usuarios/historias_usuario/<str:numero_identidad_paciente>', obtener_historia_de_un_paciente, name='obtener_historia_de_un_paciente'),
+    path('pacientes/<str:numero_identidad>/update/', actualizar_paciente_view),
+    path('pacientes/<str:numero_identidad>/delete/', eliminar_paciente_view),
 ]
