@@ -23,7 +23,7 @@ def crear_paciente(form):
 
 from pymongo import MongoClient
 
-from ServidorUsuarios.ServidorUsuarios import settings
+from ServidorUsuarios import settings
 
 def get_mongo_client():
     return MongoClient(settings.MONGO_CLI)
