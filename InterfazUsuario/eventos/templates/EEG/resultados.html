@@ -68,9 +68,10 @@
                                     </div>
 
                                     <!-- Script con el JSON -->
-                                    <script id="resultado_json_{{ archivo.id }}" type="application/json">
-                                        {{ archivo.resultado_analisis|json_script:"resultado_json_{{ archivo.id }}" }}
-                                    </script>
+                                    {% with "resultado_json_"|add:archivo.id|stringformat:"s" as json_id %}
+                                      {{ archivo.resultado_analisis|json_script:json_id }}
+                                    {% endwith %}
+
 
                                 </div>
                             </td>
