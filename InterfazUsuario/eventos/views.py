@@ -126,6 +126,7 @@ def resultados_eeg(request):
                             """)
     
     archivos = get_resultados_eeg(paciente_data['eventos'])
+
     context = {
         'lista_archivos': archivos
     }

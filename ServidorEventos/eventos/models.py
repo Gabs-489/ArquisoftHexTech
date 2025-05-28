@@ -37,7 +37,8 @@ class ConsultaMedica(Evento):
 
 class EEG(Examen):
     path = models.CharField(max_length=500)
-    resultado_analisis = models.CharField(max_length=1000)
+    resultado_analisis = models.TextField()
+
 
     def __str__(self):
         return '%s %s %s %s' % (self.id,self.nombre, self.fecha, self.resultado_analisis)

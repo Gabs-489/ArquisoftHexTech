@@ -2,53 +2,89 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
+<style>
+    .detalle-valor {
+        margin-left: 10px;
+        font-family: monospace;
+        white-space: pre-wrap;
+    }
+    .detalle-lista {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .detalle-lista > li {
+        margin-bottom: 6px;
+    }
+</style>
 {% endblock %}
-{% block content %}
 
+{% block content %}
 <div class="content">
-    <div class="">
-        <div class="page-header-title">
-            <h4 class="page-title">Elegir resultado </h4>
-            <!--- 
-            <div style="text-align:right;">
-                <button type="button" class="btn btn-success waves-effect waves-light"
-                        onClick=" window.location.href='/measurementcreate' " style="text-align:center;">+
-                </button>
-            </div>
-            --->
-        </div>
+    <div class="page-header-title">
+        <h4 class="page-title">Elegir resultado</h4>
     </div>
 
     <br>
 
     <div class="page-content-wrapper">
         <div class="container">
-            <!-- Content page -->
-
             <div class="panel panel-default">
                 <div class="panel-body">
                     {% if lista_archivos|length > 0 %}
                     <table class="table table-hover">
                         <thead>
-                        <tr style="color:#0E2EB0">
-                            <th>Id</th>
-                            <th>Nombre</th>
-                            <th>Fecha</th>
-                            <th>Ver Resultado</th>
-                        </tr>
+                            <tr style="color:#0E2EB0">
+                                <th>Id</th>
+                                <th>Nombre</th>
+                                <th>Fecha</th>
+                                <th>Ver Resultado</th>
+                            </tr>
                         </thead>
                         <tbody>
+                            {% for archivo in lista_archivos %}
+                            <tr>
+                                <td>{{ archivo.id }}</td>
+                                <td>{{ archivo.nombre }}</td>
+                                <td>{{ archivo.fecha }}</td>
+                                <td>
+                                    <pre>{{ archivo.resultado_analisis}}</pre>
 
-                        {% for archivo in lista_archivos %}
-                        <tr>
-                            <td>{{ archivo.id }}</td>
-                            <td>{{ archivo.nombre }}</td>
-                            <td>{{ archivo.fecha }}</td>
-                            <td> {{archivo.resultado_analisis}}</td>
-                        </tr>
-                        {% endfor %}
+                                    <div>
+                                        <strong>Diagnóstico:</strong>
+                                        <span style="color:#0E2EB0; font-weight:bold;">
+                                            {{ archivo.resultado_analisis.diagnostico }}
+                                        </span>
 
+                                        <br>
+                                        <button class="btn btn-link" onclick="toggleDetalles({{ archivo.id }})">
+                                            Ver detalles
+                                        </button>
+
+                                        <div id="detalles-{{ archivo.id }}" style="display: none; margin-top: 10px;">
+                                            <ul class="detalle-lista">
+                                                {% for clave, valor in archivo.resultado_analisis.items %}
+                                                    {% if clave != 'diagnostico' %}
+                                                        <li>
+                                                            <strong>{{ clave }}:</strong>
+                                                            <span class="detalle-valor">
+                                                                {% if valor.items %}
+                                                                    {{ valor|safe }}
+                                                                {% elif valor.0 and valor != '' %}
+                                                                    {{ valor }}
+                                                                {% else %}
+                                                                    {{ valor }}
+                                                                {% endif %}
+                                                            </span>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                     {% else %}
@@ -59,15 +95,22 @@
 
                     <div style="text-align:center;">
                         <button type="button" class="btn btn-primary waves-effect waves-light"
-                                onClick=" window.location.href='/interfaz/eventos/EEG' ">
+                                onClick=" window.location.href='/interfaz/eventos' ">
                             Back
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+function toggleDetalles(id) {
+    const div = document.getElementById("detalles-" + id);
+    div.style.display = div.style.display === "none" ? "block" : "none";
+}
+</script>
 {% endblock %}
+
+
