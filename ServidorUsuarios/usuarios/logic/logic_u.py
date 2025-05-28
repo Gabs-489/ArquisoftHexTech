@@ -46,8 +46,8 @@ def crear_paciente(data):
 
 def get_paciente(numero_identidad):
     col = get_paciente_collection()
-    paciente = col.find_one({"numero_identidad": numero_identidad})
-    return paciente  # Diccionario o None
+    paciente = col.find_one({"usuario.numero_identidad": numero_identidad})
+    return paciente 
 
 def get_pacientes():
     col = get_paciente_collection()
@@ -56,13 +56,13 @@ def get_pacientes():
 def actualizar_paciente(numero_identidad, nuevos_datos):
     col = get_paciente_collection()
     result = col.update_one(
-        {"numero_identidad": numero_identidad},
+        {"usuario.numero_identidad": numero_identidad},
         {"$set": nuevos_datos}
     )
     return result.modified_count
 
 def eliminar_paciente(numero_identidad):
     col = get_paciente_collection()
-    result = col.delete_one({"numero_identidad": numero_identidad})
+    result = col.delete_one({"usuario.numero_identidad": numero_identidad})
     return result.deleted_count
 
