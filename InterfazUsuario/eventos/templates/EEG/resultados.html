@@ -51,10 +51,21 @@
                                     <div>
                                         <strong>Diagnóstico:</strong>
                                         <span id="diagnostico-{{ archivo.id }}" style="color:#0E2EB0; font-weight:bold;"></span>
-
-                                        <pre style="background:#f9f9f9; padding:10px; border:1px solid #ccc;">
-{{ archivo.resultado_analisis }}
+                                        <pre>
+                                        {{ archivo.resultado_analisis|safe }}
                                         </pre>
+                                        
+                                        <script>
+                                        try {
+                                            const data = JSON.parse('{{ archivo.resultado_analisis|escapejs }}');
+                                            console.log('JSON válido:', data);
+                                        } catch(e) {
+                                            console.error('No es JSON válido:', e);
+                                        }
+                                        </script>
+
+
+                                       
 
                                         <br>
                                         <button class="btn btn-link" onclick="toggleDetalles({{ archivo.id }})">
