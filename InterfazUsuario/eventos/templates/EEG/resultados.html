@@ -1,6 +1,5 @@
 {% extends 'base.html' %} 
 {% load static %}
-{% load json_script %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
@@ -69,9 +68,10 @@
                                     </div>
 
                                     <!-- Script con el JSON -->
-                                    <script type="application/json" id="resultado_json_{{ archivo.id }}">
-                                        {{ archivo.resultado_analisis|safe }}
+                                    <script id="resultado_json_{{ archivo.id }}" type="application/json">
+                                        {{ archivo.resultado_analisis|json_script:"resultado_json_{{ archivo.id }}" }}
                                     </script>
+
                                 </div>
                             </td>
                         </tr>
