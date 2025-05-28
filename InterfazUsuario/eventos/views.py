@@ -126,12 +126,6 @@ def resultados_eeg(request):
                             """)
     
     archivos = get_resultados_eeg(paciente_data['eventos'])
-    print(type(archivos))  # Para ver qué tipo es 'archivos' (debería ser lista)
-    if len(archivos) > 0:
-        print(type(archivos[0]))  # Para ver el tipo del primer elemento (debería ser dict o modelo)
-        print(type(archivos[0].get('resultado_analisis', None)))  # Si 'archivos' es lista de dicts
-        # O si es lista de objetos modelo:
-        print(type(getattr(archivos[0], 'resultado_analisis', None)))
 
     context = {
         'lista_archivos': archivos
