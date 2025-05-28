@@ -128,6 +128,13 @@ def resultados_eeg(request):
     archivos = get_resultados_eeg(paciente_data['eventos'])
     print(archivos)
 
+    for archivo in archivos:
+        if isinstance(archivo['resultado_analisis'], str):
+            try:
+                archivo['resultado_analisis'] = json.loads(archivo['resultado_analisis'])
+            except json.JSONDecodeError:
+                archivo['resultado_analisis'] = {}
+
     context = {
         'lista_archivos': archivos
     }
