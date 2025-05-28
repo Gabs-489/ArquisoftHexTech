@@ -1,10 +1,9 @@
-{% extends 'EEG/base.html' %}
+{% extends 'EEG/base.html' %} 
 {% load static %}
 
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/analizadorEEG/inicio.css' %}">
     <style>
-        /* Estilos para detalle bonito */
         .detalle-valor {
             margin-left: 10px;
             font-family: monospace;
@@ -22,10 +21,8 @@
 
 {% block content %}
 <div class="content">
-    <div class="">
-        <div class="page-header-title">
-            <h4 class="page-title">Elegir resultado</h4>
-        </div>
+    <div class="page-header-title">
+        <h4 class="page-title">Elegir resultado</h4>
     </div>
 
     <br>
@@ -37,55 +34,52 @@
                     {% if lista_archivos|length > 0 %}
                     <table class="table table-hover">
                         <thead>
-                        <tr style="color:#0E2EB0">
-                            <th>Id</th>
-                            <th>Nombre</th>
-                            <th>Fecha</th>
-                            <th>Ver Resultado</th>
-                        </tr>
+                            <tr style="color:#0E2EB0">
+                                <th>Id</th>
+                                <th>Nombre</th>
+                                <th>Fecha</th>
+                                <th>Ver Resultado</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {% for archivo in lista_archivos %}
-                        <tr>
-                            <td>{{ archivo.id }}</td>
-                            <td>{{ archivo.nombre }}</td>
-                            <td>{{ archivo.fecha }}</td>
-                            <td>
-                                <div>
-                                    <!-- Mostrar solo el campo 'diagnostico' -->
-                                    <strong>Diagnóstico:</strong>
-                                    <span id="diagnostico-{{ archivo.id }}" style="color:#0E2EB0; font-weight:bold;"></span>
-                                    <pre style="background:#f9f9f9; padding:10px; border:1px solid #ccc;">
-                                {{ archivo.resultado_analisis }}
-                                    </pre>
+                            {% for archivo in lista_archivos %}
+                            <tr>
+                                <td>{{ archivo.id }}</td>
+                                <td>{{ archivo.nombre }}</td>
+                                <td>{{ archivo.fecha }}</td>
+                                <td>
+                                    <div>
+                                        <strong>Diagnóstico:</strong>
+                                        <span id="diagnostico-{{ archivo.id }}" style="color:#0E2EB0; font-weight:bold;"></span>
 
-                                    <!-- Botón para mostrar detalles -->
-                                    <br>
-                                    <button class="btn btn-link" onclick="toggleDetalles({{ archivo.id }})">
-                                        Ver detalles
-                                    </button>
+                                        <pre style="background:#f9f9f9; padding:10px; border:1px solid #ccc;">
+{{ archivo.resultado_analisis }}
+                                        </pre>
 
-                                    <!-- Contenedor oculto de detalles -->
-                                    <div id="detalles-{{ archivo.id }}" style="display: none; margin-top: 10px;">
-                                        <ul class="detalle-lista" id="detalle-lista-{{ archivo.id }}"></ul>
+                                        <br>
+                                        <button class="btn btn-link" onclick="toggleDetalles({{ archivo.id }})">
+                                            Ver detalles
+                                        </button>
+
+                                        <div id="detalles-{{ archivo.id }}" style="display: none; margin-top: 10px;">
+                                            <ul class="detalle-lista" id="detalle-lista-{{ archivo.id }}"></ul>
+                                        </div>
+
+                                        {% if archivo.resultado_analisis %}
+                                            {% with "resultado_json_"|add:archivo.id|stringformat:"s" as json_id %}
+                                                {{ archivo.resultado_analisis|json_script:json_id }}
+                                            {% endwith %}
+                                        {% endif %}
                                     </div>
-
-                                    <!-- Script con el JSON -->
-                                    {% with "resultado_json_"|add:archivo.id|stringformat:"s" as json_id %}
-                                      {{ archivo.resultado_analisis|json_script:json_id }}
-                                    {% endwith %}
-
-
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                                </td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                     {% else %}
-                    <div style="text-align: center; font-weight: bold; color: #0E2EB0; margin-top: 20px;">
-                        No hay resultados de EEG disponibles.
-                    </div>
+                        <div style="text-align: center; font-weight: bold; color: #0E2EB0; margin-top: 20px;">
+                            No hay resultados de EEG disponibles.
+                        </div>
                     {% endif %}
 
                     <div style="text-align:center;">
@@ -100,47 +94,57 @@
     </div>
 </div>
 
-<!-- JavaScript para mostrar diagnostico y detalles -->
+<!-- JavaScript para procesar y mostrar detalles -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        {% for archivo in lista_archivos %}
-        const resultado = JSON.parse(document.getElementById("resultado_json_{{ archivo.id }}").textContent);
-        document.getElementById("diagnostico-{{ archivo.id }}").textContent = resultado.diagnostico;
+        const jsonScripts = document.querySelectorAll("script[type='application/json']");
 
-        function formatValue(value) {
-            if (typeof value === 'object' && value !== null) {
-                if (Array.isArray(value)) {
-                    return value.map(v => formatValue(v)).join(', ');
-                } else {
-                    // Objeto: mostrar claves y valores en forma de lista
-                    let str = '';
-                    for (const [k,v] of Object.entries(value)) {
-                        str += `${k}: ${formatValue(v)}\n`;
+        jsonScripts.forEach(script => {
+            const id = script.id;  // ejemplo: "resultado_json_5"
+            const archivoId = id.split("_").pop();
+            const resultado = JSON.parse(script.textContent);
+
+            // Mostrar diagnóstico
+            const diagnosticoSpan = document.getElementById("diagnostico-" + archivoId);
+            if (diagnosticoSpan && resultado.diagnostico) {
+                diagnosticoSpan.textContent = resultado.diagnostico;
+            }
+
+            // Formatear valor recursivamente
+            function formatValue(value) {
+                if (typeof value === 'object' && value !== null) {
+                    if (Array.isArray(value)) {
+                        return value.map(v => formatValue(v)).join(', ');
+                    } else {
+                        let str = '';
+                        for (const [k, v] of Object.entries(value)) {
+                            str += `${k}: ${formatValue(v)}\n`;
+                        }
+                        return str.trim();
                     }
-                    return str.trim();
-                }
-            } else {
-                return String(value);
-            }
-        }
-
-        const lista = document.getElementById("detalle-lista-{{ archivo.id }}");
-        lista.innerHTML = ''; // limpio por si acaso
-        for (const [clave, valor] of Object.entries(resultado)) {
-            if (clave !== "diagnostico") {
-                const item = document.createElement("li");
-                const valorFormateado = formatValue(valor);
-
-                // Si es objeto complejo, lo mostramos en bloque de texto con monospace
-                if (typeof valor === 'object' && valor !== null) {
-                    item.innerHTML = `<strong>${clave}:</strong><br><pre class="detalle-valor">${valorFormateado}</pre>`;
                 } else {
-                    item.innerHTML = `<strong>${clave}:</strong> ${valorFormateado}`;
+                    return String(value);
                 }
-                lista.appendChild(item);
             }
-        }
-        {% endfor %}
+
+            // Insertar detalles
+            const lista = document.getElementById("detalle-lista-" + archivoId);
+            if (lista) {
+                lista.innerHTML = '';
+                for (const [clave, valor] of Object.entries(resultado)) {
+                    if (clave !== "diagnostico") {
+                        const item = document.createElement("li");
+                        const valorFormateado = formatValue(valor);
+                        if (typeof valor === 'object' && valor !== null) {
+                            item.innerHTML = `<strong>${clave}:</strong><br><pre class="detalle-valor">${valorFormateado}</pre>`;
+                        } else {
+                            item.innerHTML = `<strong>${clave}:</strong> ${valorFormateado}`;
+                        }
+                        lista.appendChild(item);
+                    }
+                }
+            }
+        });
     });
 
     function toggleDetalles(id) {
