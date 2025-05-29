@@ -102,9 +102,12 @@ def resultados_eeg(request):
             fernet = Fernet(key)
             archivos_descifrados = []
             for valor in archivos.values():
-                resultado_descifrado = fernet.decrypt(valor.encode()).decode()
+                print("DEBUG - Valor original:", valor)
+                resultado_cifrado = valor.get("resultado", "")
+                resultado_descifrado = fernet.decrypt(resultado_cifrado.encode()).decode()
                 resultado = json.loads(resultado_descifrado)
-                archivos_descifrados.append(resultado)
+                valor["resultado"] = resultado
+                archivos_descifrados.append(valor)
             return Response({"success": True, "examenes": archivos_descifrados})  # Serializar el QuerySet
         else:
             return Response({"success": False, "error": "Formato incorrecto"}, status=400)
