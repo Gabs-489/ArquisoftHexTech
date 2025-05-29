@@ -132,6 +132,14 @@ function toggleDetalles(id) {
     div.style.display = div.style.display === "none" ? "block" : "none";
 }
 </script>
+<script>
+    const inicioConsulta = performance.now();
+    window.addEventListener("load", () => {
+        const finConsulta = performance.now();
+        const duracion = (finConsulta - inicioConsulta) / 1000;
+        console.log(`⏱ Tiempo total desde que inició la carga hasta que se mostró todo: ${duracion.toFixed(3)} segundos`);
+    });
+</script>
 {% endblock %}
 
 
