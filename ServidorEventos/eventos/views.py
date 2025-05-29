@@ -96,7 +96,7 @@ def resultados_eeg(request):
         eventos = json.loads(eventos_json)  # Convertir a lista de Python
         if isinstance(eventos, list) and all(isinstance(num, int) for num in eventos):
             archivos = get_resultados(eventos)  # Obtener los exámenes desde la BD
-            if modo == 1:
+            if modo == "1":
                 
                 key = os.getenv('FERNET_KEY')
                 if not key:
