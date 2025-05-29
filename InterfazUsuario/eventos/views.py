@@ -126,7 +126,7 @@ def resultados_eeg(request):
                                 window.location.href = "/interfaz/eventos";  // Redirigir a la página principal o donde desees
                             </script>
                             """)
-    modo = input("Ingrese 1 para descifrar, 2 para recibirlos recibir ya descifrados: ")
+    modo = (input("Ingrese 1 para descifrar, 2 para recibirlos recibir ya descifrados: "))
     
     archivos = get_resultados_eeg(paciente_data['eventos'],modo)
     print(archivos)
@@ -342,7 +342,7 @@ def get_examenes_eeg(eventos):
 
 def get_resultados_eeg(eventos):
     try:
-        params = {"eventos": json.dumps(eventos)} 
+        params = {"eventos": json.dumps(eventos),"modo": str(modo)} 
         response = requests.get(f"{MICROSERVICIO_EVENTOS_URL}/EEG/resultados", params=params)
         if response.status_code == 200:
             response_data = response.json()
