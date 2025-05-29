@@ -340,7 +340,7 @@ def get_examenes_eeg(eventos):
         return {"success": False, "error": f"Error de conexión: {str(e)}"}
 
 
-def get_resultados_eeg(eventos):
+def get_resultados_eeg(eventos,modo):
     try:
         params = {"eventos": json.dumps(eventos),"modo": str(modo)} 
         response = requests.get(f"{MICROSERVICIO_EVENTOS_URL}/EEG/resultados", params=params)
