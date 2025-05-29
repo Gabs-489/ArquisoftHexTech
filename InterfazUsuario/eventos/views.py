@@ -116,6 +116,7 @@ def analisis_eeg(request):
 
 #@login_required
 def resultados_eeg(request):
+    start_time = time.time()
     paciente_data = request.session.get('paciente_data', None)
     if not paciente_data:
         mensaje = "No se encontró información del paciente."
@@ -138,6 +139,9 @@ def resultados_eeg(request):
     context = {
         'lista_archivos': archivos
     }
+    end_time = time.time() 
+    elapsed_time = end_time - start_time
+    print(f"Tiempo total en resultados_eeg: {elapsed_time:.4f} segundos")
     return render(request, 'EEG/resultados.html', context)
 
 #@login_required
