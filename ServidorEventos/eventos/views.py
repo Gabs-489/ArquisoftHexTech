@@ -110,6 +110,7 @@ def resultados_eeg(request):
                     resultado = json.loads(resultado_descifrado)
                     valor["resultado_analisis"] = resultado
                     archivos_descifrados.append(valor)
+                print(archivos_descifrados)
                 return Response({"success": True, "examenes": archivos_descifrados})
             else:
                 return Response({"success": True, "examenes": list(archivos.values())})
