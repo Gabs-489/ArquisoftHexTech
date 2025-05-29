@@ -143,7 +143,9 @@ def resultados_eeg(request):
     }
     end_time = time.time() 
     elapsed_time = end_time - start_time
+    print("\n")
     print(f"Tiempo total en resultados_eeg: {elapsed_time:.4f} segundos")
+    print("\n")
     return render(request, 'EEG/resultados.html', context)
 
 #@login_required
