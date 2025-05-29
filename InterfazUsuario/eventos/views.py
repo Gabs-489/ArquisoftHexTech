@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from InterfazUsuario.settings import MICROSERVICIO_EVENTOS_URL
 from InterfazUsuario.auth0backend import getRole
 import requests
+import time
 
 # Create your views here.
 
