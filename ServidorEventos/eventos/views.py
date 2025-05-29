@@ -91,24 +91,28 @@ def analisis_eeg(request):
 @api_view(['GET'])
 def resultados_eeg(request):
     eventos_json = request.GET.get("eventos", "[]")  # Obtener la lista de exámenes en JSON
+    modo = request.GET.get("modo", "1")
     try:
         eventos = json.loads(eventos_json)  # Convertir a lista de Python
         if isinstance(eventos, list) and all(isinstance(num, int) for num in eventos):
             archivos = get_resultados(eventos)  # Obtener los exámenes desde la BD
-            #key = os.getenv('FERNET_KEY')
-            #if not key:
-                #return Response({"success": False, "error": "Falta la clave de cifrado"}, status=500)
+            if modo == 1:
+                
+                key = os.getenv('FERNET_KEY')
+                if not key:
+                    return Response({"success": False, "error": "Falta la clave de cifrado"}, status=500)
 
-            #fernet = Fernet(key)
-            #archivos_descifrados = []
-            #for valor in archivos.values():
-                #resultado_cifrado = valor.get("resultado_analisis", "")
-                #resultado_descifrado = fernet.decrypt(resultado_cifrado.encode()).decode()
-                #resultado = json.loads(resultado_descifrado)
-                #valor["resultado_analisis"] = resultado
-                #archivos_descifrados.append(valor)
-            #return Response({"success": True, "examenes": archivos_descifrados})
-            return Response({"success": True, "examenes": list(archivos.values())})
+                fernet = Fernet(key)
+                archivos_descifrados = []
+                for valor in archivos.values():
+                    resultado_cifrado = valor.get("resultado_analisis", "")
+                    resultado_descifrado = fernet.decrypt(resultado_cifrado.encode()).decode()
+                    resultado = json.loads(resultado_descifrado)
+                    valor["resultado_analisis"] = resultado
+                    archivos_descifrados.append(valor)
+                return Response({"success": True, "examenes": archivos_descifrados})
+            else:
+                return Response({"success": True, "examenes": list(archivos.values())})
         else:
             return Response({"success": False, "error": "Formato incorrecto"}, status=400)
     except json.JSONDecodeError:
