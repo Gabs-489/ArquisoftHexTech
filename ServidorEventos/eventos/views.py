@@ -15,6 +15,7 @@ from .logic.logic_analizadorEEG import *
 import requests
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from cryptography.fernet import Fernet
 
 # Create your views here.
 
