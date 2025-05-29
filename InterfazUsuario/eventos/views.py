@@ -126,8 +126,9 @@ def resultados_eeg(request):
                                 window.location.href = "/interfaz/eventos";  // Redirigir a la página principal o donde desees
                             </script>
                             """)
+    modo = input("Ingrese 1 para descifrar, 2 para recibirlos recibir ya descifrados: ")
     
-    archivos = get_resultados_eeg(paciente_data['eventos'])
+    archivos = get_resultados_eeg(paciente_data['eventos'],modo)
     print(archivos)
 
     for archivo in archivos:
