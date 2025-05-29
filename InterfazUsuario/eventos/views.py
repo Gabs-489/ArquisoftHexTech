@@ -117,7 +117,7 @@ def analisis_eeg(request):
 
 #@login_required
 def resultados_eeg(request):
-    start_time = time.time()
+    
     paciente_data = request.session.get('paciente_data', None)
     if not paciente_data:
         mensaje = "No se encontró información del paciente."
@@ -127,7 +127,7 @@ def resultados_eeg(request):
                             </script>
                             """)
     modo = (input("Ingrese 1 para descifrar, 2 para recibirlos recibir ya descifrados: "))
-    
+    start_time = time.time()
     archivos = get_resultados_eeg(paciente_data['eventos'],modo)
     print(archivos)
 
