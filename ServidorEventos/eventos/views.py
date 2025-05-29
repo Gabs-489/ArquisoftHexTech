@@ -95,8 +95,16 @@ def resultados_eeg(request):
         if isinstance(eventos, list) and all(isinstance(num, int) for num in eventos):
             archivos = get_resultados(eventos)  # Obtener los exámenes desde la BD
             key = os.getenv('FERNET_KEY')
-        
-            return Response({"success": True, "examenes": list(archivos.values())})  # Serializar el QuerySet
+            if not key:
+                return Response({"success": False, "error": "Falta la clave de cifrado"}, status=500)
+
+            fernet = Fernet(key)
+            archivos_descifrados = []
+            for valor in archivos.values():
+                resultado_descifrado = fernet.decrypt(valor.encode()).decode()
+                resultado = json.loads(resultado_descifrado)
+                archivos_descifrados.append(resultado)
+            return Response({"success": True, "examenes": archivos_descifrados})  # Serializar el QuerySet
         else:
             return Response({"success": False, "error": "Formato incorrecto"}, status=400)
     except json.JSONDecodeError:
